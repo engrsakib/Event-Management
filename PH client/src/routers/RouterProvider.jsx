@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/auth/admin",
+    path: "/auth/user",
     errorElement: <h1>auth error</h1>,
     children: [
       {
