@@ -46,7 +46,8 @@ export default function SignUp() {
     if (!form.password.trim()) return "Password is required";
     if (!form.photo.trim()) return "Photo URL is required";
     for (let rule of passwordRules) {
-      if (!rule.test(form.password)) return "Password does not meet all criteria";
+      if (!rule.test(form.password))
+        return "Password does not meet all criteria";
     }
     return null;
   };
@@ -63,19 +64,29 @@ export default function SignUp() {
     }
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/register`, {
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        photo: form.photo,
-      });
+      const res = await axios.post(
+        `${BASE_URL}/register`,
+        {
+         
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          photo: form.photo,
+        },
+        {
+          
+          withCredentials: true, 
+        }
+      );
       if (res.status === 200 || res.status === 201) {
-        navigate("/auth/user/login");
+        navigate("/");
       } else {
         setError("Sign up failed. Please try again.");
       }
     } catch (err) {
-      setError(err?.response?.data?.message || "Sign up failed. Please try again.");
+      setError(
+        err?.response?.data?.message || "Sign up failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -87,7 +98,11 @@ export default function SignUp() {
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-tr from-[#fff] to-[#FFF5F5]">
       {/* Left Side: Image */}
       <section className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white/70 px-6 py-10 md:py-0">
-        <img src={logo} alt="main logo" className="w-52 lg:w-[70%] max-w-full drop-shadow-xl" />
+        <img
+          src={logo}
+          alt="main logo"
+          className="w-52 lg:w-[70%] max-w-full drop-shadow-xl"
+        />
       </section>
 
       {/* Divider for md+ */}
@@ -110,7 +125,10 @@ export default function SignUp() {
           <form onSubmit={handleSubmit} className="w-full">
             {/* Name */}
             <div className="mb-4">
-              <label htmlFor="name" className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1">
+              <label
+                htmlFor="name"
+                className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1"
+              >
                 Name
               </label>
               <input
@@ -127,7 +145,10 @@ export default function SignUp() {
 
             {/* Email */}
             <div className="mb-4">
-              <label htmlFor="email" className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1">
+              <label
+                htmlFor="email"
+                className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1"
+              >
                 Email
               </label>
               <input
@@ -144,7 +165,10 @@ export default function SignUp() {
 
             {/* Photo URL */}
             <div className="mb-4">
-              <label htmlFor="photo" className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1">
+              <label
+                htmlFor="photo"
+                className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1"
+              >
                 Photo URL
               </label>
               <input
@@ -161,7 +185,10 @@ export default function SignUp() {
 
             {/* Password */}
             <div className="mb-2">
-              <label htmlFor="password" className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1">
+              <label
+                htmlFor="password"
+                className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1"
+              >
                 Password
               </label>
               <div className="w-full relative">
@@ -201,7 +228,10 @@ export default function SignUp() {
               <div className="mb-2 mt-2">
                 <ul className="space-y-1">
                   {passwordRules.map((rule, idx) => (
-                    <li key={rule.label} className="flex items-center text-sm md:text-base">
+                    <li
+                      key={rule.label}
+                      className="flex items-center text-sm md:text-base"
+                    >
                       <span
                         className={`inline-block w-4 h-4 rounded-full mr-2 border ${
                           rule.test(form.password)
@@ -243,7 +273,9 @@ export default function SignUp() {
                       ? "Moderate"
                       : "Strong"}
                   </span>
-                  <span className="text-gray-500 font-semibold">{passStrength}%</span>
+                  <span className="text-gray-500 font-semibold">
+                    {passStrength}%
+                  </span>
                 </div>
                 <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
@@ -262,7 +294,9 @@ export default function SignUp() {
 
             {/* Error */}
             {error && (
-              <p className="text-red-600 font-semibold mt-2 text-left">{error}</p>
+              <p className="text-red-600 font-semibold mt-2 text-left">
+                {error}
+              </p>
             )}
 
             {/* submit button */}
@@ -277,7 +311,10 @@ export default function SignUp() {
             <div className="flex justify-center items-center mt-6">
               <span className="text-base md:text-lg font-medium text-[#590000]">
                 Already have an account?{" "}
-                <Link to="/auth/user/login" className="text-[#7F0B0B] underline font-bold">
+                <Link
+                  to="/auth/user/login"
+                  className="text-[#7F0B0B] underline font-bold"
+                >
                   Sign In
                 </Link>
               </span>
