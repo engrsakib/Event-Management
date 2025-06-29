@@ -10,7 +10,10 @@ const port = process.env.PORT || 5000;
 // ========== Middleware ==========
 app.use(
   cors({
-    origin: ["http://localhost:5173","https://test-todo-tas.surge.sh"],
+    origin: [
+      "http://localhost:5173",
+      "https://ph-event-management-client.vercel.app",
+    ],
     credentials: true,
   })
 );
@@ -39,7 +42,6 @@ async function run() {
     // Custom Register Route: checks for duplicate email, then registers and returns JWT token
     app.post("/register", async (req, res) => {
       const { name, email, password, photo } = req.body;
-      
 
       if (!email || !name || !password || !photo) {
         return res
@@ -70,6 +72,7 @@ async function run() {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          domain: ".vercel.app",
         })
         .json({
           success: true,
@@ -114,40 +117,46 @@ async function run() {
           success: true,
           message: "Login successful",
           token,
-          user: { name: user.name, email: user.email, _id: user._id, photo: user.photo },
+          user: {
+            name: user.name,
+            email: user.email,
+            _id: user._id,
+            photo: user.photo,
+          },
         });
     });
 
     // logOut
     app.post("/logout", (req, res) => {
-  try {
-    res
-      .clearCookie("token", {
-        
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", 
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", 
-        path: "/",
-      })
-      .status(200) 
-      .json({ success: true, message: "Logged out successfully" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Logout failed" });
-  }
-});
-
-
+      try {
+        res
+          .clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+            path: "/",
+          })
+          .status(200)
+          .json({ success: true, message: "Logged out successfully" });
+      } catch (error) {
+        res.status(500).json({ success: false, message: "Logout failed" });
+      }
+    });
 
     // Optional: Protect route example
     app.get("/profile", verifyToken, async (req, res) => {
       res.json({ user: req.decoded });
     });
 
+    // verifyToken
     function verifyToken(req, res, next) {
-      const token = req?.cookies?.token;
-      if (!token) {
+      const authHeader = req.headers.authorization;
+      if (!authHeader) {
         return res.status(401).send({ message: "Unauthorized" });
       }
+
+      const token = authHeader.split(" ")[1]; // "Bearer TOKEN" থেকে টোকেনটি আলাদা করা
+
       jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
         if (err) {
           return res.status(401).send({ message: "Invalid token" });
