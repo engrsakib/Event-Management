@@ -6,7 +6,7 @@ const useProfile = () => {
   return useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/profile"); // আলাদা করে withCredentials লাগবে না
+      const res = await axiosSecure.get("/profile");
       return res.data;
     }
   });

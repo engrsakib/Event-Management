@@ -73,13 +73,15 @@ export default function SignUp() {
           password: form.password,
           photo: form.photo,
         },
-        {
-          
-          withCredentials: true, 
-        }
       );
       if (res.status === 200 || res.status === 201) {
+        const token = res.data.token;
+      if (token) {
+        localStorage.setItem("token", token);
         navigate("/");
+      } else {
+        setError("No token received from server.");
+      }
       } else {
         setError("Sign up failed. Please try again.");
       }

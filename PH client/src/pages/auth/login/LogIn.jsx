@@ -44,9 +44,6 @@ export default function LogIn() {
           email,
           password,
         },
-        {
-          withCredentials: true,
-        }
       );
 
       if (response.status !== 200 || !response?.data?.token) {
@@ -57,7 +54,7 @@ export default function LogIn() {
 
       const token = response.data.token;
       if (token) {
-        localStorage.setItem("accessToken", token);
+        localStorage.setItem("token", token);
         navigate("/");
       } else {
         setError("No token received from server.");

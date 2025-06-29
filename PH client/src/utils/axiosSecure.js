@@ -1,9 +1,29 @@
-// utils/axiosSecure.js
-import axios from "axios";
+import axios from 'axios';
+
+// আপনার সার্ভারের লাইভ URL
+const baseURL = import.meta.env.VITE_ADMIN_URL; 
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000", // আপনার সার্ভার URL
-  withCredentials: true             // কুকি স্বয়ংক্রিয়ভাবে যাবে
+  baseURL: baseURL,
 });
+
+
+axiosSecure.interceptors.request.use(
+  (config) => {
+   
+    const token = localStorage.getItem('token');
+    
+
+    if (token) {
+     
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    
+    return Promise.reject(error);
+  }
+);
 
 export default axiosSecure;
