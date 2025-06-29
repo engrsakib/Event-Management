@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import logo from "/logo.png";
 import useProfile from "../../hooks/getUserProfile";
+import axios from "axios";
 
 const userMock = {
   isLoggedIn: true,
@@ -18,7 +19,7 @@ const Navbar = () => {
 
   const dropdownRef = useRef(null);
 
-  console.log(data?.user);
+  const BASE_URL = import.meta.env.VITE_ADMIN_URL
 
   // user setter
   useEffect(() => {
@@ -40,6 +41,28 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownOpen]);
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.data.success) {
+        window.location.href = "/auth/user/login";
+      }
+    } catch (error) {
+      // যদি কোনো কারণে রিকোয়েস্ট ব্যর্থ হয়
+      console.error(
+        "লগআউট ব্যর্থ হয়েছে:",
+        error.response?.data?.message || error.message
+      );
+    }
+  };
 
   return (
     <nav className="bg-gradient-to-r from-[#7F0B0B] to-[#590000] shadow-lg sticky top-0 z-50">
@@ -142,12 +165,15 @@ const Navbar = () => {
                   {/* Dropdown */}
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg z-50 py-2 animate-fadeIn">
-                      <div className="px-4 py-2 font-semibold">{user?.name}</div>
+                      <div className="px-4 py-2 font-semibold">
+                        {user?.name}
+                      </div>
                       <button
                         className="w-full text-left px-4 py-2 hover:bg-[#FFF2CC] transition rounded-b"
                         onClick={() => {
                           setDropdownOpen(false);
                           // TODO: Add your logout logic here
+                          handleLogout();
                         }}
                       >
                         Logout
