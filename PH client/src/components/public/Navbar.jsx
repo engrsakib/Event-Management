@@ -11,7 +11,7 @@ const userMock = {
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const user = userMock;
+  const user = null;
   const dropdownRef = useRef(null);
 
   // Close dropdown on click outside

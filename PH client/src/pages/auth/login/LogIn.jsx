@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import logo from "/logo.svg";
 import { PiEyeClosedBold, PiEyeClosedDuotone } from "react-icons/pi";
@@ -55,47 +56,61 @@ export default function LogIn() {
       } else {
         setError("No token received from server.");
       }
-
-      // Debug print
-      console.log("Token from response:", token);
-      console.log("Token in localStorage:", localStorage.getItem("accessToken"));
     } catch (err) {
-      console.error("Login error:", err);
       setError("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Fill credentials handler
+  const handleFillCredentials = () => {
+    setEmail("snazmussakib01@gmail.com");
+    setPassword("123456");
+    setError(null);
+  };
+
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-white">
+    <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-tr from-[#fff] to-[#FFF5F5]">
       {/* Left Side: Image */}
-      <section className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white px-6 py-10 md:py-0">
-        <img src={logo} alt="main logo" className="w-52 lg:w-[70%] max-w-full" />
+      <section className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white/70 px-6 py-10 md:py-0">
+        <img src={logo} alt="main logo" className="w-52 lg:w-[70%] max-w-full drop-shadow-xl" />
       </section>
 
       {/* Divider for md+ */}
       <div className="hidden md:flex flex-col justify-center items-center">
-        <div className="w-[2px] h-[320px] md:h-[80vh] bg-[#7D0000]"></div>
+        <div className="w-[2px] h-[320px] md:h-[80vh] bg-gradient-to-b from-[#7F0B0B] to-[#590000]" />
       </div>
 
       {/* Right Side: Form */}
-      <section className="w-full md:w-[40%] flex justify-center items-center bg-white px-4 py-10 md:py-0">
+      <section className="w-full md:w-[40%] flex justify-center items-center bg-white/80 px-4 py-10 md:py-0">
         <div className="w-full max-w-[430px]">
           <div className="mb-8">
-            <h3 className="text-[#7D0000] text-3xl md:text-4xl font-semibold leading-tight text-center">
+            <h3 className="text-[#7F0B0B] text-3xl md:text-4xl font-extrabold leading-tight text-center drop-shadow">
               {data.greetings}
             </h3>
-            <p className="text-[#646464] text-lg md:text-2xl font-medium leading-tight text-center mt-2">
+            <p className="text-[#590000] text-lg md:text-2xl font-medium leading-tight text-center mt-2">
               {data.message}
             </p>
+          </div>
+
+          {/* Hit Credentials Button */}
+          <div className="flex justify-end mb-2">
+            <button
+              type="button"
+              onClick={handleFillCredentials}
+              className="bg-gradient-to-r from-[#7F0B0B] to-[#590000] text-white px-4 py-2 rounded-full shadow hover:scale-105 transition font-semibold text-sm"
+              title="Fill demo credentials"
+            >
+              Hit Credentials
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="w-full">
             <div className="mb-4 mt-5">
               <label
                 htmlFor="email"
-                className="block text-lg md:text-xl text-[#262626] font-medium mb-1"
+                className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1"
               >
                 Email
               </label>
@@ -111,14 +126,14 @@ export default function LogIn() {
                   setError(null);
                 }}
                 onFocus={() => setError(null)}
-                className="border border-[#ddd] rounded-md outline-none px-4 w-full h-12 md:h-16 text-[#646464] text-base md:text-lg font-medium py-2 md:py-3 focus:border-[#7D0000] transition-colors duration-300"
+                className="border border-[#7F0B0B]/20 rounded-xl outline-none px-4 w-full h-12 md:h-14 text-[#590000] text-base md:text-lg font-medium py-2 md:py-3 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/30 bg-white transition-all duration-300 shadow-sm"
               />
             </div>
 
             <div className="mb-4">
               <label
                 htmlFor="password"
-                className="block text-lg md:text-xl text-[#262626] font-medium mb-1"
+                className="block text-lg md:text-xl text-[#7F0B0B] font-semibold mb-1"
               >
                 Password
               </label>
@@ -130,20 +145,18 @@ export default function LogIn() {
                   autoComplete="off"
                   placeholder="Password"
                   value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
+                  onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setError(null)}
-                  className="border border-[#ddd] text-[#646464] text-base md:text-lg font-medium rounded-md outline-none px-4 w-full h-12 md:h-16 py-2 md:py-3 focus:border-[#7D0000] transition-colors duration-300"
+                  className="border border-[#7F0B0B]/20 text-[#590000] text-base md:text-lg font-medium rounded-xl outline-none px-4 w-full h-12 md:h-14 py-2 md:py-3 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/30 bg-white transition-all duration-300 shadow-sm"
                 />
                 {isEyeOpen ? (
                   <PiEyeClosedBold
-                    className="absolute top-3 md:top-5 right-3 text-xl md:text-2xl text-[#777777] cursor-pointer"
+                    className="absolute top-3 md:top-4 right-3 text-xl md:text-2xl text-[#7F0B0B] cursor-pointer"
                     onClick={() => setIsEyeOpen(false)}
                   />
                 ) : (
                   <PiEyeClosedDuotone
-                    className="absolute top-3 md:top-5 right-3 text-xl md:text-2xl text-[#777777] cursor-pointer"
+                    className="absolute top-3 md:top-4 right-3 text-xl md:text-2xl text-[#7F0B0B] cursor-pointer"
                     onClick={() => setIsEyeOpen(true)}
                   />
                 )}
@@ -159,25 +172,25 @@ export default function LogIn() {
               <div className="flex items-center">
                 {isChecked ? (
                   <IoMdCheckboxOutline
-                    className="text-[#7D0000] text-xl md:text-2xl cursor-pointer"
+                    className="text-[#7F0B0B] text-xl md:text-2xl cursor-pointer"
                     onClick={() => setIsChecked(false)}
                   />
                 ) : (
                   <MdOutlineCheckBoxOutlineBlank
-                    className="text-[#7D0000] text-xl md:text-2xl cursor-pointer"
+                    className="text-[#7F0B0B] text-xl md:text-2xl cursor-pointer"
                     onClick={() => setIsChecked(true)}
                   />
                 )}
                 <label
                   htmlFor="remember"
-                  className="ml-2 text-[#7D0000] text-base md:text-lg font-medium"
+                  className="ml-2 text-[#590000] text-base md:text-lg font-medium"
                 >
                   Remember me
                 </label>
               </div>
               <Link
-                to={"/auth/admin/recover-password"}
-                className="text-[#7D0000] underline text-base md:text-lg font-medium"
+                to={"/auth/user/recover-password"}
+                className="text-[#7F0B0B] underline text-base md:text-lg font-medium"
               >
                 Forgot Password?
               </Link>
@@ -186,15 +199,15 @@ export default function LogIn() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-8 border border-[#ddd] text-white text-lg md:text-xl font-semibold rounded-[40px] outline-none px-4 w-full h-12 md:h-16 py-2 md:py-3 focus:border-[#7D0000] transition-colors duration-300 bg-gradient-to-r from-[#D80000] to-[#720000] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-8 border-0 text-white text-lg md:text-xl font-bold rounded-full outline-none px-4 w-full h-12 md:h-14 py-2 md:py-3 focus:ring-2 focus:ring-[#7F0B0B]/30 bg-gradient-to-r from-[#7F0B0B] to-[#590000] shadow-lg hover:scale-[1.02] active:scale-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Signing In..." : "Sign In"}
             </button>
 
             <div className="flex justify-center items-center mt-6">
-              <span className="text-base md:text-lg font-medium">
+              <span className="text-base md:text-lg font-medium text-[#590000]">
                 Don't have an account?{" "}
-                <Link to="/auth/admin/registration" className="text-[#7D0000] underline">
+                <Link to="/auth/user/registration" className="text-[#7F0B0B] underline font-bold">
                   Sign Up
                 </Link>
               </span>
