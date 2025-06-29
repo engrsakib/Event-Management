@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import logo from "/logo.png";
 import useProfile from "../../hooks/getUserProfile";
 import axios from "axios";
+import { Link } from "react-router";
 
 const userMock = {
   isLoggedIn: true,
@@ -122,36 +123,36 @@ const Navbar = () => {
             }`}
           >
             <li>
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="hover:text-yellow-300 transition-colors duration-200"
               >
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/events"
+              <Link
+                to="/events"
                 className="hover:text-yellow-300 transition-colors duration-200"
               >
                 Events
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/add-event"
+              <Link
+                to="/add-event"
                 className="hover:text-yellow-300 transition-colors duration-200"
               >
                 Add Event
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/my-events"
+              <Link
+                to="/my-events"
                 className="hover:text-yellow-300 transition-colors duration-200"
               >
                 My Event
-              </a>
+              </Link>
             </li>
             <li className="relative" ref={dropdownRef}>
               {user ? (
@@ -183,12 +184,12 @@ const Navbar = () => {
                   )}
                 </>
               ) : (
-                <a
-                  href="/auth/user/login"
+                <Link
+                  to="/auth/user/login"
                   className="bg-yellow-400 text-[#7F0B0B] px-4 py-2 rounded-md font-semibold shadow hover:bg-yellow-300 transition"
                 >
                   Sign In
-                </a>
+                </Link>
               )}
             </li>
           </ul>

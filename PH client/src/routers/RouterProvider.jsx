@@ -4,13 +4,14 @@ import LogIn from "../pages/auth/login/LogIn";
 import SignIn from "../pages/auth/signIn/SignIn";
 import ForgetFrom from "../pages/auth/forgottenPassword/ForgetFrom";
 import Home from "../pages/auth/home/Home";
+import NotFound from "../pages/auth/NotFounds/NotFound";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <h1>dashboard error</h1>,
+    errorElement: <NotFound/>,
     children: [
       {
         path: "/",
