@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 
 const galleryImages = [
-  "https://images.unsplash.com/photo-1465101178521-c1a9136a3b8a?auto=format&fit=crop&w=500&q=80",
-  "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=500&q=80",
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80",
-  "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=500&q=80",
+  "https://5.imimg.com/data5/SELLER/Default/2024/11/462865092/KL/FV/UY/73009269/event-management-services.jpeg",
+  "https://media.licdn.com/dms/image/v2/C4E1BAQHQzcJ-Mte5JQ/company-background_10000/company-background_10000/0/1584692313412/atelier_events_dc_llc_cover?e=2147483647&v=beta&t=F_uTm6zZYC0A3yQ8v4IGuRAO2ir5zq-TmhnDPl3P_bM",
+  "https://4.imimg.com/data4/WR/TX/MY-23918569/wedding-reception-event-services.jpg",
+  "https://onlinecareertraining.bergen.edu/common/images/1/16842/event-management.jpg",
   "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=500&q=80",
   "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=500&q=80",
-  "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=500&q=80",
-  "https://images.unsplash.com/photo-1465101178521-c1a9136a3b8a?auto=format&fit=crop&w=500&q=80",
+  "https://www.universityevents.harvard.edu/sites/default/files/Homepage-Photo-PG-The-Plaza.jpg",
+  "https://www.mbatuts.com/wp-content/uploads/2019/11/Event-Planning-Business-in-plan.jpg",
+  "https://news.miami.edu/uonline/_assets/images/images-stories/2023/10/event-management-sports-lg.jpg",
+  "https://www.training.com.au/wp-content/uploads/event-manager.jpeg",
+  "https://gomomentus.com/hs-fs/hubfs/shutterstock_2140269661.jpg?length=1280&name=shutterstock_2140269661.jpg",
+  "https://blog.inevent.com/wp-content/uploads/2024/01/networking-min-1024x577.png",
 ];
 
 export default function ImageGallery() {
