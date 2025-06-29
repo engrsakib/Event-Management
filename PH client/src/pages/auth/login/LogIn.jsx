@@ -38,10 +38,16 @@ export default function LogIn() {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/login`, {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${BASE_URL}/login`,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.status !== 200 || !response?.data?.token) {
         setError("Login failed. Please check your credentials.");
@@ -65,8 +71,8 @@ export default function LogIn() {
 
   // Fill credentials handler
   const handleFillCredentials = () => {
-    setEmail("snazmussakib01@gmail.com");
-    setPassword("123456");
+    setEmail("hunter@test.com");
+    setPassword("HunterMan1@");
     setError(null);
   };
 
@@ -74,7 +80,11 @@ export default function LogIn() {
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-gradient-to-tr from-[#fff] to-[#FFF5F5]">
       {/* Left Side: Image */}
       <section className="w-full md:w-1/2 flex flex-col justify-center items-center bg-white/70 px-6 py-10 md:py-0">
-        <img src={logo} alt="main logo" className="w-52 lg:w-[70%] max-w-full drop-shadow-xl" />
+        <img
+          src={logo}
+          alt="main logo"
+          className="w-52 lg:w-[70%] max-w-full drop-shadow-xl"
+        />
       </section>
 
       {/* Divider for md+ */}
@@ -164,7 +174,9 @@ export default function LogIn() {
             </div>
 
             {error && (
-              <p className="text-red-600 font-semibold mt-2 text-left">{error}</p>
+              <p className="text-red-600 font-semibold mt-2 text-left">
+                {error}
+              </p>
             )}
 
             {/* remember & forgot password */}
@@ -207,7 +219,10 @@ export default function LogIn() {
             <div className="flex justify-center items-center mt-6">
               <span className="text-base md:text-lg font-medium text-[#590000]">
                 Don't have an account?{" "}
-                <Link to="/auth/user/registration" className="text-[#7F0B0B] underline font-bold">
+                <Link
+                  to="/auth/user/registration"
+                  className="text-[#7F0B0B] underline font-bold"
+                >
                   Sign Up
                 </Link>
               </span>

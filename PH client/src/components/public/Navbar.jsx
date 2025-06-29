@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from "react";
-import logo from '/logo.png';
+import logo from "/logo.png";
+import useProfile from "../../hooks/getUserProfile";
 
 const userMock = {
   isLoggedIn: true,
@@ -11,19 +12,27 @@ const userMock = {
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const user = null;
+
+  const [user, setUser] = useState(null);
+  const { data, isLoading, isError, error } = useProfile();
+
   const dropdownRef = useRef(null);
+
+  console.log(data?.user);
+
+  // user setter
+  useEffect(() => {
+    setUser(data?.user);
+  }, [data]);
 
   // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     }
+
     if (dropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -80,8 +89,14 @@ const Navbar = () => {
             </button>
           </div>
           {/* Menu */}
-          <ul className={`flex-1 md:flex md:items-center md:justify-end gap-6 font-medium text-white 
-            ${menuOpen ? "absolute bg-gradient-to-r from-[#7F0B0B] to-[#590000] shadow-xl left-0 top-16 w-full py-6 flex flex-col items-center space-y-4 md:space-y-0 z-40" : "hidden md:flex"}`}>
+          <ul
+            className={`flex-1 md:flex md:items-center md:justify-end gap-6 font-medium text-white 
+            ${
+              menuOpen
+                ? "absolute bg-gradient-to-r from-[#7F0B0B] to-[#590000] shadow-xl left-0 top-16 w-full py-6 flex flex-col items-center space-y-4 md:space-y-0 z-40"
+                : "hidden md:flex"
+            }`}
+          >
             <li>
               <a
                 href="/"
@@ -115,19 +130,19 @@ const Navbar = () => {
               </a>
             </li>
             <li className="relative" ref={dropdownRef}>
-              {user?.isLoggedIn ? (
+              {user ? (
                 <>
                   <img
-                    src={user.profilePic}
+                    src={user?.photo}
                     alt="Profile"
                     className="w-10 h-10 rounded-full ring-2 ring-yellow-400 object-cover transition transform hover:scale-105 cursor-pointer"
-                    title={user.name}
+                    title={user?.name}
                     onClick={() => setDropdownOpen((v) => !v)}
                   />
                   {/* Dropdown */}
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg z-50 py-2 animate-fadeIn">
-                      <div className="px-4 py-2 font-semibold">{user.name}</div>
+                      <div className="px-4 py-2 font-semibold">{user?.name}</div>
                       <button
                         className="w-full text-left px-4 py-2 hover:bg-[#FFF2CC] transition rounded-b"
                         onClick={() => {

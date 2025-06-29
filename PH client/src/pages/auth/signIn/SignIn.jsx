@@ -63,7 +63,7 @@ export default function SignUp() {
     }
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/signup`, {
+      const res = await axios.post(`${BASE_URL}/register`, {
         name: form.name,
         email: form.email,
         password: form.password,
