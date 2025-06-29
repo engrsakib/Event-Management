@@ -1,55 +1,31 @@
 import React, { useState, useEffect } from "react";
+import Carasol from "./Carasol";
 
-// 1. Carousel Section
-const carouselData = [
-  {
-    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-    text: "Flood Relief Event",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
-    text: "Blood Donation Drive",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80",
-    text: "Winter Clothes Distribution",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
-    text: "Tree Plantation Campaign",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80",
-    text: "Education for All",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80",
-    text: "Food for Needy",
-  },
-];
+// 1. Carousel Section Data
+
 
 // 2. Who We Are section
 const whoWeAre = [
   {
     title: "Our Mission",
     icon: (
-      <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeWidth="2" d="M12 8c-1.845 0-3.5 1.02-3.5 2.5S10.155 13 12 13s3.5-1.02 3.5-2.5S13.845 8 12 8z"/><path strokeWidth="2" d="M12 22s8-4.5 8-10V5.75C20 4.784 19.216 4 18.25 4h-12.5C4.784 4 4 4.784 4 5.75V12c0 5.5 8 10 8 10z"/></svg>
+      <svg className="w-12 h-12 text-[#7F0B0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeWidth="2" d="M12 8c-1.845 0-3.5 1.02-3.5 2.5S10.155 13 12 13s3.5-1.02 3.5-2.5S13.845 8 12 8z"/><path strokeWidth="2" d="M12 22s8-4.5 8-10V5.75C20 4.784 19.216 4 18.25 4h-12.5C4.784 4 4 4.784 4 5.75V12c0 5.5 8 10 8 10z"/></svg>
     ),
-    desc: "We are committed to helping people in need through various events and drives, inspiring positive change in society.",
+    desc: "We are dedicated to social change — running impactful events, guiding volunteers, and building a better tomorrow.",
   },
   {
     title: "Our Vision",
     icon: (
-      <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" strokeWidth="2"/><path strokeWidth="2" d="M2 12C3.5 7 7.5 4 12 4s8.5 3 10 8c-1.5 5-5.5 8-10 8s-8.5-3-10-8z"/></svg>
+      <svg className="w-12 h-12 text-[#7F0B0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" strokeWidth="2"/><path strokeWidth="2" d="M2 12C3.5 7 7.5 4 12 4s8.5 3 10 8c-1.5 5-5.5 8-10 8s-8.5-3-10-8z"/></svg>
     ),
-    desc: "To be the most impactful social event platform in Bangladesh, connecting volunteers with people in need.",
+    desc: "To be the top event platform in Bangladesh — connecting hearts, hands, and hope.",
   },
   {
     title: "Our Values",
     icon: (
-      <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeWidth="2" d="M12 20l-7-7 7-7 7 7-7 7z"/></svg>
+      <svg className="w-12 h-12 text-[#7F0B0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeWidth="2" d="M12 20l-7-7 7-7 7 7-7 7z"/></svg>
     ),
-    desc: "Empathy, integrity, transparency, and action are at the heart of every event we organize.",
+    desc: "Empathy. Integrity. Transparency. Action. This is our DNA for every event, every smile.",
   },
 ];
 
@@ -59,25 +35,29 @@ const priorityEvents = [
     icon: "🌊",
     name: "Flood Relief",
     desc: "Emergency support and rehabilitation during floods.",
-    color: "bg-cyan-100 text-cyan-800",
+    color: "from-[#7F0B0B]/80 to-[#FFDF8B]/90",
+    shadow: "shadow-[0_10px_40px_0_rgba(127,11,11,0.20)]",
   },
   {
     icon: "🩸",
     name: "Blood Donation",
     desc: "Organizing blood donation camps to save lives.",
-    color: "bg-rose-100 text-rose-800",
+    color: "from-[#E52A2A]/80 to-[#FFBABA]/90",
+    shadow: "shadow-[0_10px_40px_0_rgba(229,42,42,0.20)]",
   },
   {
     icon: "🧣",
     name: "Winter Help",
     desc: "Distributing warm clothes to the underprivileged.",
-    color: "bg-yellow-100 text-yellow-800",
+    color: "from-[#FFB300]/80 to-[#FFF6D6]/90",
+    shadow: "shadow-[0_10px_40px_0_rgba(255,179,0,0.18)]",
   },
   {
     icon: "🌳",
     name: "Tree Plantation",
     desc: "Planting trees for a greener tomorrow.",
-    color: "bg-green-100 text-green-800",
+    color: "from-[#2BC48A]/80 to-[#CFFFE6]/90",
+    shadow: "shadow-[0_10px_40px_0_rgba(43,196,138,0.18)]",
   },
 ];
 
@@ -134,14 +114,9 @@ function GalleryModal({ open, img, onClose }) {
 
 export default function Home() {
   // Carousel state
-  const [carouselIdx, setCarouselIdx] = useState(0);
+  
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCarouselIdx((idx) => (idx + 1) % carouselData.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
+  
 
   // Testimonial state
   const [testimonialIdx, setTestimonialIdx] = useState(0);
@@ -162,98 +137,70 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-gradient-to-br from-white to-gray-100 min-h-screen text-[#222]">
-      {/* Carousel */}
-      <section className="w-full h-[350px] md:h-[480px] lg:h-[620px] relative overflow-hidden shadow-2xl rounded-b-3xl animate-fadeIn">
-        {carouselData.map((item, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-opacity duration-1000 ${i === carouselIdx ? "opacity-100 z-10" : "opacity-0 z-0"}`}
-            aria-hidden={i !== carouselIdx}
-          >
-            <img
-              src={item.img}
-              className="w-full h-full object-cover object-center scale-105 blur-[1px]"
-              alt={item.text}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/70 to-white/0 flex items-center justify-center">
-              <h2 className="text-3xl md:text-5xl font-extrabold px-4 py-2 rounded-xl shadow-2xl text-primary backdrop-blur-2xl animate-slideInUp tracking-tight uppercase drop-shadow-lg">
-                {item.text}
-              </h2>
-            </div>
-          </div>
-        ))}
-        <div className="absolute bottom-7 w-full flex justify-center gap-2 z-10">
-          {carouselData.map((_, i) => (
-            <span
-              key={i}
-              className={`h-[12px] w-[12px] rounded-full cursor-pointer ring-2 transition-all duration-200 ${carouselIdx === i ? "bg-primary ring-primary" : "bg-gray-300 ring-gray-300/60"}`}
-              onClick={() => setCarouselIdx(i)}
-            />
-          ))}
-        </div>
-      </section>
+    <main className="bg-gradient-to-br from-white to-[#FFF9F5] min-h-screen text-[#232323]">
+
+        <Carasol/>
 
       {/* Who We Are */}
-      <section className="max-w-5xl mx-auto mt-14 px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-7 text-center text-primary animate-fadeInDown">Who We Are</h2>
-        <div className="grid md:grid-cols-3 gap-7">
+      <section className="max-w-6xl mx-auto mt-16 px-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-9 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Who We Are</h2>
+        <div className="grid md:grid-cols-3 gap-9">
           {whoWeAre.map((item, i) => (
             <div
               key={i}
-              className="bg-white shadow-xl rounded-2xl p-8 flex flex-col items-center text-center border border-primary/10 hover:-translate-y-2 transition-all duration-300 group animate-fadeIn"
+              className="bg-gradient-to-b from-white to-[#FFF4E3]/80 shadow-lg rounded-3xl p-10 flex flex-col items-center text-center border border-[#7F0B0B]/15 hover:-translate-y-3 hover:scale-[1.045] hover:shadow-2xl transition-all duration-350 group animate-fadeIn"
             >
               <span className="mb-3 drop-shadow-xl group-hover:scale-125 transition-transform duration-300">{item.icon}</span>
-              <h3 className="mt-3 mb-2 font-bold text-xl text-primary group-hover:text-secondary transition">{item.title}</h3>
-              <p className="text-gray-600">{item.desc}</p>
+              <h3 className="mt-3 mb-3 font-extrabold text-2xl text-[#7F0B0B] group-hover:text-yellow-500 transition">{item.title}</h3>
+              <p className="text-gray-600 text-lg">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Priority Events */}
-      <section className="max-w-6xl mx-auto mt-20 px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-7 text-center text-primary animate-fadeInDown">Our Priority Events</h2>
-        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-7">
+      <section className="max-w-7xl mx-auto mt-20 px-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-10 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Our Priority Events</h2>
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
           {priorityEvents.map((e, i) => (
             <div
               key={i}
-              className={`rounded-2xl shadow-xl p-8 flex flex-col items-center border border-primary/10 bg-white hover:scale-105 hover:shadow-2xl transition-all duration-300 animate-fadeIn`}
-              style={{ transitionDelay: `${i * 50}ms` }}
+              className={`rounded-3xl p-10 flex flex-col items-center border-2 border-white/80 bg-gradient-to-br ${e.color} hover:scale-105 hover:shadow-2xl ${e.shadow} transition-all duration-300 animate-fadeIn`}
+              style={{ transitionDelay: `${i * 60}ms` }}
             >
-              <span className={`text-4xl mb-2 animate-bounce-slow`}>{e.icon}</span>
-              <h4 className={`font-bold text-lg mb-1 ${e.color}`}>{e.name}</h4>
-              <p className="text-gray-600 text-center text-sm">{e.desc}</p>
+              <span className={`text-5xl mb-3 animate-bounce-slow`}>{e.icon}</span>
+              <h4 className={`font-bold text-xl mb-2 text-[#7F0B0B]`}>{e.name}</h4>
+              <p className="text-gray-700 text-center text-base font-medium">{e.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="max-w-3xl mx-auto mt-20 px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-7 text-center text-primary animate-fadeInDown">Testimonials</h2>
-        <div className="relative min-h-[220px]">
+      <section className="max-w-3xl mx-auto mt-24 px-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-10 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Testimonials</h2>
+        <div className="relative min-h-[240px]">
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-1000 ${i === testimonialIdx ? "opacity-100 z-10" : "opacity-0 z-0"}`}
+              className={`absolute inset-0 flex flex-col items-center justify-center text-center transition-opacity duration-1000 ${i === testimonialIdx ? "opacity-100 z-10" : "opacity-0 z-0"}`}
             >
               <img
                 src={t.avatar}
                 alt={t.name}
-                className="w-20 h-20 rounded-full border-4 border-primary shadow-xl mb-4 animate-scaleIn"
+                className="w-24 h-24 rounded-full border-[4px] border-[#7F0B0B] shadow-xl mb-5 animate-scaleIn"
               />
-              <p className="text-lg text-center max-w-xl mb-2 text-[#222] font-medium">"{t.text}"</p>
-              <div className="font-extrabold text-primary">{t.name}</div>
+              <p className="text-xl text-gray-700 font-semibold max-w-xl mb-3 font-serif italic">"{t.text}"</p>
+              <div className="font-extrabold text-[#7F0B0B] text-lg">{t.name}</div>
               <div className="text-sm text-gray-500">{t.title}</div>
             </div>
           ))}
         </div>
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-5">
           {testimonials.map((_, i) => (
             <span
               key={i}
-              className={`h-3 w-3 rounded-full cursor-pointer border-2 transition-all duration-150 ${testimonialIdx === i ? "bg-primary border-primary" : "bg-gray-300 border-gray-300/60"}`}
+              className={`h-3.5 w-3.5 rounded-full cursor-pointer border-2 transition-all duration-150 ${testimonialIdx === i ? "bg-[#7F0B0B] border-yellow-400" : "bg-gray-300 border-gray-300/60"}`}
               onClick={() => setTestimonialIdx(i)}
             />
           ))}
@@ -261,22 +208,22 @@ export default function Home() {
       </section>
 
       {/* Gallery */}
-      <section className="max-w-5xl mx-auto mt-20 px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-7 text-center text-primary animate-fadeInDown">Photo Gallery</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <section className="max-w-6xl mx-auto mt-24 px-4">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-10 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Photo Gallery</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-7">
           {galleryImages.map((img, i) => (
             <div
               key={i}
-              className="relative group rounded-2xl overflow-hidden shadow-xl cursor-pointer animate-fadeIn"
+              className="relative group rounded-3xl overflow-hidden shadow-lg cursor-pointer animate-fadeIn hover:ring-4 ring-[#7F0B0B]/30"
               onClick={() => openModal(img)}
             >
               <img
                 src={img}
                 alt={`gallery-${i}`}
-                className="w-full h-44 object-cover transition-transform duration-300 group-hover:scale-110"
+                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-200">
-                <span className="text-5xl text-white font-bold animate-bounce">+</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#7F0B0B]/80 via-transparent to-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-200">
+                <span className="text-6xl text-white drop-shadow-lg font-bold animate-bounce">+</span>
               </div>
             </div>
           ))}
@@ -285,52 +232,30 @@ export default function Home() {
       </section>
 
       {/* Contact Form */}
-      <section className="max-w-xl mx-auto mt-20 px-4 mb-20">
-        <h2 className="text-3xl md:text-4xl font-extrabold mb-7 text-center text-primary animate-fadeInDown">Contact Us</h2>
-        <form className="bg-white rounded-2xl shadow-2xl p-8 flex flex-col gap-4 border border-primary/10 animate-fadeIn">
+      <section className="max-w-xl mx-auto mt-24 px-4 mb-20">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-10 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Contact Us</h2>
+        <form className="bg-gradient-to-br from-white via-[#FFF3E3] to-[#FFF9F5] rounded-3xl shadow-2xl p-10 flex flex-col gap-5 border border-[#7F0B0B]/15 animate-fadeIn">
           <div>
-            <label className="block mb-2 font-semibold text-primary" htmlFor="name">Name</label>
-            <input className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50" id="name" type="text" placeholder="Your Name" required />
+            <label className="block mb-2 font-semibold text-[#7F0B0B]" htmlFor="name">Name</label>
+            <input className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7F0B0B]/30 font-medium" id="name" type="text" placeholder="Your Name" required />
           </div>
           <div>
-            <label className="block mb-2 font-semibold text-primary" htmlFor="mail">Email</label>
-            <input className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50" id="mail" type="email" placeholder="your@email.com" required />
+            <label className="block mb-2 font-semibold text-[#7F0B0B]" htmlFor="mail">Email</label>
+            <input className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7F0B0B]/30 font-medium" id="mail" type="email" placeholder="your@email.com" required />
           </div>
           <div>
-            <label className="block mb-2 font-semibold text-primary" htmlFor="phone">Phone</label>
-            <input className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50" id="phone" type="text" placeholder="Your Phone" required />
+            <label className="block mb-2 font-semibold text-[#7F0B0B]" htmlFor="phone">Phone</label>
+            <input className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7F0B0B]/30 font-medium" id="phone" type="text" placeholder="Your Phone" required />
           </div>
           <div>
-            <label className="block mb-2 font-semibold text-primary" htmlFor="msg">Message</label>
-            <textarea className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50" id="msg" placeholder="Your message..." rows={4} required />
+            <label className="block mb-2 font-semibold text-[#7F0B0B]" htmlFor="msg">Message</label>
+            <textarea className="w-full bg-gray-100 text-[#7F0B0B] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#7F0B0B]/30 font-medium" id="msg" placeholder="Your message..." rows={4} required />
           </div>
-          <button type="submit" className="bg-primary text-white font-bold px-8 py-2 rounded-xl shadow hover:bg-secondary transition">Send</button>
+          <button type="submit" className="bg-[#7F0B0B] text-white font-bold px-8 py-2 rounded-xl shadow hover:bg-[#590000] hover:scale-105 transition-all duration-200">Send</button>
         </form>
       </section>
 
-      {/* Custom Animations */}
-      <style>
-        {`
-        .text-primary { color: #7F0B0B; }
-        .bg-primary { background-color: #7F0B0B; }
-        .border-primary { border-color: #7F0B0B; }
-        .ring-primary { --tw-ring-color: #7F0B0B; }
-        .text-secondary { color: #590000; }
-        .bg-secondary { background-color: #590000; }
-        .hover\\:bg-secondary:hover { background-color: #590000; }
-        .animate-fadeIn { animation: fadeIn 1.1s cubic-bezier(.4,0,.2,1); }
-        .animate-fadeInDown { animation: fadeInDown 1s cubic-bezier(.4,0,.2,1); }
-        .animate-slideInUp { animation: slideInUp 1s cubic-bezier(.4,0,.2,1); }
-        .animate-zoomIn { animation: zoomIn 0.3s cubic-bezier(.4,0,.2,1); }
-        .animate-bounce-slow { animation: bounce 2s infinite; }
-        .animate-scaleIn { animation: scaleIn .7s cubic-bezier(.4,0,.2,1); }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-        @keyframes fadeInDown { from { opacity:0; transform: translateY(-32px);} to { opacity:1; transform: none; } }
-        @keyframes slideInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:none;} }
-        @keyframes zoomIn { from {opacity:0; transform:scale(0.9);} to {opacity:1; transform:scale(1);} }
-        @keyframes scaleIn { from {opacity:0; transform:scale(0.8);} to {opacity:1; transform:scale(1);} }
-        `}
-      </style>
+      
     </main>
   );
 }
