@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 // ========== Middleware ==========
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173","https://test-todo-tas.surge.sh"],
     credentials: true,
   })
 );
@@ -29,82 +29,114 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 async function run() {
   try {
-    const phCallectionUser = client
-      .db("PHCallections")
-      .collection("users");
+    const phCallectionUser = client.db("PHCallections").collection("users");
 
     // Custom Register Route: checks for duplicate email, then registers and returns JWT token
     app.post("/register", async (req, res) => {
-      const { name, email, password } = req.body;
-      if (!email || !name || !password) {
-        return res.status(400).json({ success: false, message: "All fields required" });
+      const { name, email, password, photo } = req.body;
+      
+
+      if (!email || !name || !password || !photo) {
+        return res
+          .status(400)
+          .json({ success: false, message: "All fields required" });
       }
 
       // Check duplicate email
       const existing = await phCallectionUser.findOne({ email });
       if (existing) {
-        return res.status(409).json({ success: false, message: "Email already registered" });
+        return res
+          .status(409)
+          .json({ success: false, message: "Email already registered" });
       }
 
       // Insert user (you can hash password here if you want)
-      const newUser = { name, email, password };
+      const newUser = { name, email, password, photo };
       const result = await phCallectionUser.insertOne(newUser);
 
       // JWT token with name & email
-      const token = jwt.sign(
-        { email, name },
-        process.env.JWT_SEC,
-        { expiresIn: "1h" }
-      );
+      const token = jwt.sign({ email, name }, process.env.JWT_SEC, {
+        expiresIn: "1h",
+      });
 
       // Set token in cookie and also send in response
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      }).json({
-        success: true,
-        message: "Registration successful",
-        token,
-        user: { name, email, _id: result.insertedId }
-      });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        })
+        .json({
+          success: true,
+          message: "Registration successful",
+          token,
+          user: { name, photo, email, _id: result.insertedId },
+        });
     });
 
     // Login route (for completeness)
     app.post("/login", async (req, res) => {
       const { email, password } = req.body;
       if (!email || !password) {
-        return res.status(400).json({ success: false, message: "All fields required" });
+        return res
+          .status(400)
+          .json({ success: false, message: "All fields required" });
       }
       const user = await phCallectionUser.findOne({ email });
       if (!user) {
-        return res.status(401).json({ success: false, message: "User not found" });
+        return res
+          .status(401)
+          .json({ success: false, message: "Authenciation Error" });
       }
       if (user.password !== password) {
-        return res.status(401).json({ success: false, message: "Wrong password" });
+        return res
+          .status(401)
+          .json({ success: false, message: "Authenciation Error" });
       }
       // JWT token with name & email
       const token = jwt.sign(
-        { email: user.email, name: user.name },
+        { email: user.email, name: user.name, photo: user.photo },
         process.env.JWT_SEC,
         { expiresIn: "7d" }
       );
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      }).json({
-        success: true,
-        message: "Login successful",
-        token,
-        user: { name: user.name, email: user.email, _id: user._id }
-      });
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        })
+        .json({
+          success: true,
+          message: "Login successful",
+          token,
+          user: { name: user.name, email: user.email, _id: user._id, photo: user.photo },
+        });
     });
+
+    // logOut
+    app.post("/logout", (req, res) => {
+  try {
+    res
+      .clearCookie("token", {
+        
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", 
+        path: "/",
+      })
+      .status(200) 
+      .json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Logout failed" });
+  }
+});
+
+
 
     // Optional: Protect route example
     app.get("/profile", verifyToken, async (req, res) => {
@@ -124,7 +156,6 @@ async function run() {
         next();
       });
     }
-
   } finally {
     // You can close the client if you want (not closing for dev server)
   }
