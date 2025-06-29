@@ -60,8 +60,8 @@ async function run() {
       const result = await phCallectionUser.insertOne(newUser);
 
       // JWT token with name & email
-      const token = jwt.sign({ email, name }, process.env.JWT_SEC, {
-        expiresIn: "1h",
+      const token = jwt.sign({ email, name, photo }, process.env.JWT_SEC, {
+        expiresIn: "7d",
       });
 
       // Set token in cookie and also send in response
