@@ -5,6 +5,7 @@ import SignIn from "../pages/auth/signIn/SignIn";
 import ForgetFrom from "../pages/auth/forgottenPassword/ForgetFrom";
 import VerifyOTP from "../pages/auth/OTP/verifyOTP";
 import SetPassword from "../pages/auth/setNewPassword/SetPassword";
+import Home from "../pages/auth/home/Home";
 
 
 const router = createBrowserRouter([
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <h1>sakib</h1>
+          <Home/>
         ),
       
       },
