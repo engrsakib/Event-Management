@@ -7,6 +7,18 @@ const cookieParser = require("cookie-parser");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
+// ============== date fans ========
+const {
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  endOfWeek,
+  subWeeks,
+  startOfMonth,
+  endOfMonth,
+  subMonths,
+} = require("date-fns");
+
 // ========== Middleware ==========
 app.use(
   cors({
@@ -38,7 +50,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const phCallectionUser = client.db("PHCallections").collection("users");
-    const phCallectionEvent = client.db("PHCallections").collection("events");
+    const phCollectionEvent = client.db("PHCallections").collection("events");
     // Custom Register Route: checks for duplicate email, then registers and returns JWT token
     app.post("/register", async (req, res) => {
       const { name, email, password, photo } = req.body;
@@ -154,13 +166,93 @@ async function run() {
       const userId = req.decoded._id;
 
       // Create a new event
-      const result = await phCallectionEvent.insertOne({ ...event, userId });
+      const result = await phCollectionEvent.insertOne({ ...event, userId });
 
       res.status(201).json({
         success: true,
         message: "Event created successfully",
         event: { ...event, _id: result.insertedId, userId },
       });
+    });
+
+    // get all events by descending order using eventDateTime
+    // app.get("/events", verifyToken, async (req, res) => {
+    //   const events = await phCollectionEvent.find().sort({ eventDateTime: -1 }).toArray();
+    //   res.json({ success: true, events });
+    // });
+
+    app.get("/events", verifyToken, async (req, res) => {
+      try {
+       
+        const { filter } = req.query;
+        const today = new Date();
+
+        
+        
+        let query = {};
+
+        
+        if (filter) {
+          let startDate, endDate;
+
+         
+          switch (filter) {
+            case "today":
+              startDate = startOfDay(today);
+              endDate = endOfDay(today);
+              break;
+            case "current_week":
+              startDate = startOfWeek(today);
+              endDate = endOfWeek(today);
+              break;
+            case "last_week":
+              const dateInLastWeek = subWeeks(today, 1);
+              startDate = startOfWeek(dateInLastWeek);
+              endDate = endOfWeek(dateInLastWeek);
+              break;
+            case "current_month":
+              startDate = startOfMonth(today);
+              endDate = endOfMonth(today);
+              break;
+            case "last_month":
+              const dateInLastMonth = subMonths(today, 1);
+              startDate = startOfMonth(dateInLastMonth);
+              endDate = endOfMonth(dateInLastMonth);
+              break;
+            default:
+             
+              break;
+          }
+
+          
+          if (startDate && endDate) {
+            query = {
+              eventDateTime: {
+                // আপনার ডাটাবেজের তারিখ ফিল্ডের নাম
+                $gte: startDate.toISOString(), // এই তারিখ থেকে শুরু
+                $lte: endDate.toISOString(), // এই তারিখের মধ্যে শেষ
+              },
+            };
+          }
+        }
+
+        // ডাটাবেজ থেকে ইভেন্ট খুঁজুন (প্রয়োজনে ফিল্টারসহ) এবং তারিখ অনুযায়ী সাজান
+        const events = await phCollectionEvent
+          .find(query)
+          .sort({ eventDateTime: -1 })
+          .toArray();
+
+        // ক্লায়েন্টকে ফলাফল পাঠিয়ে দিন
+        res.json({ success: true, events });
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Server error while fetching events",
+          });
+      }
     });
 
     // verifyToken
