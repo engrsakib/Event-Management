@@ -7,6 +7,7 @@ import Home from "../pages/home/Home";
 import NotFound from "../pages/NotFounds/NotFound";
 import AddEvents from "../pages/events/add-events/AddEvents";
 import Privete from "../pages/auth/private/Private";
+import AllEvent from "../pages/events/all-event/AllEvent";
 
 
 const router = createBrowserRouter([
@@ -27,6 +28,16 @@ const router = createBrowserRouter([
         element: (
           <Privete>
             <AddEvents/>
+          </Privete>
+
+        ),
+      
+      },
+      {
+        path: "/events",
+        element: (
+          <Privete>
+            <AllEvent/>
           </Privete>
 
         ),

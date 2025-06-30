@@ -64,6 +64,7 @@ export default function AddEvents() {
           Textlocation,
         },
         description,
+        attendeeeCount: 0,
         eventDateTime,
         createdBy: { user, userMail },
       });
