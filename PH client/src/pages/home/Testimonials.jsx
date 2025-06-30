@@ -78,7 +78,7 @@ export default function TestimonialSlider() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-16 px-8 bg-white">
+    <div className="w-11/12 lg:w-[80%] mx-auto py-16 px-8 bg-white">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-16">What Our Participants Say</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
