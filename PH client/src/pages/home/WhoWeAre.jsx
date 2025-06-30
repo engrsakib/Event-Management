@@ -28,7 +28,7 @@ export default function WhoWeAre() {
   return (
     <>
       {/* Who We Are */}
-      <section className="w-[80%] mx-auto mt-16 px-4">
+      <section className="w-11/12 lg:w-[80%] mx-auto mt-16 px-4">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-9 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Who We Are</h2>
         <div className="grid md:grid-cols-3 gap-9">
           {whoWeAre.map((item, i) => (

@@ -36,7 +36,7 @@ export default function PriorityEvents() {
   return (
     <>
        {/* Priority Events */}
-      <section className="max-w-7xl mx-auto mt-20 px-4">
+      <section className="w-11/12 lg:w-[80%] mx-auto mt-20 px-4">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-10 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">Our Priority Events</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
           {priorityEvents.map((e, i) => (

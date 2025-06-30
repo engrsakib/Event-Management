@@ -6,6 +6,7 @@ import Testimonials from "./Testimonials";
 import ImageGallery from "./ImageGallery";
 import { Helmet } from "react-helmet";
 import Contact from "./Contact";
+import EventOverview from "./EventOverview";
 
 export default function Home() {
   // Carousel state
@@ -22,6 +23,9 @@ export default function Home() {
         {/* who we are */}
         <WhoWeAre />
         {/* priority events */}
+        {/* event over view */}
+        <EventOverview/>
+        {/* priority */}
         <PriorityEvents />
         {/* Testimonials */}
         <Testimonials />

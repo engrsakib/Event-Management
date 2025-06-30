@@ -42,7 +42,7 @@ export default function ImageGallery() {
 
   return (
     <>
-      <section className="max-w-6xl mx-auto mt-24 px-4">
+      <section className="w-11/12 lg:w-[80%] mx-auto mt-24 px-4">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-10 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">
           Photo Gallery
         </h2>
