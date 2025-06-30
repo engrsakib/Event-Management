@@ -38,7 +38,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const phCallectionUser = client.db("PHCallections").collection("users");
-
+    const phCallectionEvent = client.db("PHCallections").collection("events");
     // Custom Register Route: checks for duplicate email, then registers and returns JWT token
     app.post("/register", async (req, res) => {
       const { name, email, password, photo } = req.body;
@@ -146,6 +146,21 @@ async function run() {
     // Optional: Protect route example
     app.get("/profile", verifyToken, async (req, res) => {
       res.json({ user: req.decoded });
+    });
+
+    // event management routes
+    app.post("/add-events", verifyToken, async (req, res) => {
+      const event = req.body;
+      const userId = req.decoded._id;
+
+      // Create a new event
+      const result = await phCallectionEvent.insertOne({ ...event, userId });
+
+      res.status(201).json({
+        success: true,
+        message: "Event created successfully",
+        event: { ...event, _id: result.insertedId, userId },
+      });
     });
 
     // verifyToken
