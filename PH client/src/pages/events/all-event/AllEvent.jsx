@@ -5,7 +5,7 @@ import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axiosSecure from "../../../utils/axiosSecure";
-
+import nodata from '/nodata.svg'
 
 
 const FILTERS = [
@@ -190,7 +190,7 @@ export default function AllEvents() {
           </div>
         ) : (
           <div className="w-full flex justify-center mt-16 text-[#7F0B0B] text-2xl font-bold">
-            No events found.
+            <img className="w-[80%] object-cover h-auto" src={nodata} alt="No data available" />
           </div>
         )}
       </div>
