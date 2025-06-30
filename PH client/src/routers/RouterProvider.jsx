@@ -8,6 +8,7 @@ import NotFound from "../pages/NotFounds/NotFound";
 import AddEvents from "../pages/events/add-events/AddEvents";
 import Privete from "../pages/auth/private/Private";
 import AllEvent from "../pages/events/all-event/AllEvent";
+import MyEvents from "../pages/events/my-events/MyEvents";
 
 
 const router = createBrowserRouter([
@@ -43,14 +44,18 @@ const router = createBrowserRouter([
         ),
       
       },
-    ],
-  },
-  {
-    path: "/auth/user",
-    errorElement: <h1>auth error</h1>,
-    children: [
       {
-        path: "login",
+        path: "/my-events",
+        element: (
+          <Privete>
+            <MyEvents/>
+          </Privete>
+
+        ),
+      
+      },
+      {
+        path: "/auth/user/login",
         element: (
           <>
             <LogIn />
@@ -58,13 +63,19 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "registration",
+        path: "/auth/user/registration",
         element: (
           <>
             <SignIn />
           </>
         ),
       },
+    ],
+  },
+  {
+    path: "/auth/user",
+    errorElement: <h1>auth error</h1>,
+    children: [
       {
         path: "recover-password",
         element: (
