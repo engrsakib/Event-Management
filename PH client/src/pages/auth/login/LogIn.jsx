@@ -198,7 +198,7 @@ export default function LogIn() {
                 </label>
               </div>
               <Link
-                to={"/auth/user/recover-password"}
+                to={"#"}
                 className="text-[#7F0B0B] underline text-base md:text-lg font-medium"
               >
                 Forgot Password?

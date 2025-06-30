@@ -67,6 +67,7 @@ export default function AddEvents() {
         attendeeeCount: 0,
         eventDateTime,
         createdBy: { user, userMail },
+        userId: data?.user?._id || "defaultUserId",
       });
       if (res.status === 200 || res.status === 201) {
         Swal.fire({
