@@ -54,7 +54,7 @@ export default function EventOverview() {
 
             <div className="relative">
               <img
-                src="/placeholder.svg?height=400&width=600"
+                src="https://media.istockphoto.com/id/1365436662/photo/successful-partnership.jpg?s=612x612&w=0&k=20&c=B1xspe9Q5WMsLc7Hc9clR8MWUL4bsK1MfUdDNVNR2Xg="
                 alt="Team collaboration session with professionals working together around a table with laptops and coffee"
                 width={600}
                 height={400}
