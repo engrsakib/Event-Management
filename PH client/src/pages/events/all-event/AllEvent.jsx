@@ -59,9 +59,16 @@ export default function AllEvents() {
       const res = await axiosSecure.get(url);
       return res.data?.events || [];
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     keepPreviousData: true,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 10, // 10 minutes
+    retry: 1,
+    enabled: !!user, // Only fetch if user is available
+    refetchInterval: 3000 
   });
+
 
   // Search button handler
   const handleSearch = (e) => {
