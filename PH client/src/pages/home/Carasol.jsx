@@ -38,7 +38,7 @@ export default function Carasol() {
   return (
     <>
        {/* Carousel */}
-      <section className="w-full h-[340px] md:h-[460px] lg:h-[580px] relative overflow-hidden shadow-2xl animate-fadeIn">
+      <section className="w-full h-[78vh] relative overflow-hidden shadow-2xl animate-fadeIn">
         {carouselData.map((item, i) => (
           <div
             key={i}
