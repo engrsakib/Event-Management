@@ -247,6 +247,54 @@ async function run() {
       }
     });
 
+    // get single event by id
+    app.get("/event/:id", verifyToken, async (req, res) => {
+      const { id } = req.params;
+
+      try {
+        const event = await phCollectionEvent.findOne({ _id: new ObjectId(id) });
+
+        if (!event) {
+          return res.status(404).json({ success: false, message: "Event not found." });
+        }
+
+        res.json({ success: true, event });
+      } catch (error) {
+        console.error("Failed to fetch event:", error);
+        res.status(500).json({ success: false, message: "Server error while fetching event" });
+      }
+    });
+
+    // get all events created by a specific user
+   app.get("/my-events", verifyToken, async (req, res) => {
+  try {
+    // verifyToken মিডলওয়্যার থেকে পাওয়া ডিকোড করা টোকেন থেকে ইমেইল নিন
+    const userEmail = req.decoded.email;
+
+    // যদি টোকেনে ইমেইল না থাকে, তবে একটি এরর রেসপন্স পাঠান
+    if (!userEmail) {
+      return res.status(400).json({ success: false, message: "User email not found in token." });
+    }
+
+    // console.log(`Fetching events for user: ${userEmail}`); // ডিবাগিং এর জন্য
+
+    // ডাটাবেজ থেকে সেইসব ইভেন্ট খুঁজুন যেখানে 'createdBy.userMail' ফিল্ডটি
+    // টোকেনে থাকা ব্যবহারকারীর ইমেইলের সাথে মিলে যায়।
+    const events = await phCollectionEvent
+      .find({ "createdBy.userMail": userEmail }) // আপডেট করা কোয়েরি
+      .sort({ eventDateTime: -1 }) // নতুন থেকে পুরনো ক্রমে সাজানো
+      .toArray();
+
+    // ক্লায়েন্টকে ফলাফল পাঠিয়ে দিন
+    res.json({ success: true, events });
+
+  } catch (error) {
+    console.error("Failed to fetch user's events:", error);
+    res.status(500).json({ success: false, message: "Server error while fetching user's events" });
+  }
+});
+
+
     // patch event
     app.patch("/join-event", verifyToken, async (req, res) => {
       try {
