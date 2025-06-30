@@ -4,6 +4,7 @@ import logo from "/logo.png";
 import useProfile from "../../hooks/getUserProfile";
 import axios from "axios";
 import { Link } from "react-router";
+import Loading from "../../pages/loadding/Loading";
 
 const userMock = {
   isLoggedIn: true,
@@ -42,6 +43,11 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownOpen]);
+
+  // loding and error handling
+   if (isLoading || isError || !user || !user?.email) {
+      return <Loading/>;
+    }
 
   const handleLogout = async () => {
     try {
