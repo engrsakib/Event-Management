@@ -181,15 +181,20 @@ async function run() {
     //   res.json({ success: true, events });
     // });
 
-    app.get("/events", verifyToken, async (req, res) => {
+     app.get("/events", verifyToken, async (req, res) => {
       try {
        
-        const { filter } = req.query;
+        const { filter, search } = req.query;
         const today = new Date();
-
         
-        
+       
         let query = {};
+
+       
+        if (search) {
+          
+          query.title = { $regex: search, $options: "i" };
+        }
 
         
         if (filter) {
@@ -197,61 +202,51 @@ async function run() {
 
          
           switch (filter) {
-            case "today":
+            case 'today':
               startDate = startOfDay(today);
               endDate = endOfDay(today);
               break;
-            case "current_week":
+            case 'current_week':
               startDate = startOfWeek(today);
               endDate = endOfWeek(today);
               break;
-            case "last_week":
+            case 'last_week':
               const dateInLastWeek = subWeeks(today, 1);
               startDate = startOfWeek(dateInLastWeek);
               endDate = endOfWeek(dateInLastWeek);
               break;
-            case "current_month":
+            case 'current_month':
               startDate = startOfMonth(today);
               endDate = endOfMonth(today);
               break;
-            case "last_month":
+            case 'last_month':
               const dateInLastMonth = subMonths(today, 1);
               startDate = startOfMonth(dateInLastMonth);
               endDate = endOfMonth(dateInLastMonth);
               break;
             default:
-             
               break;
           }
 
           
           if (startDate && endDate) {
-            query = {
-              eventDateTime: {
-                // আপনার ডাটাবেজের তারিখ ফিল্ডের নাম
-                $gte: startDate.toISOString(), // এই তারিখ থেকে শুরু
-                $lte: endDate.toISOString(), // এই তারিখের মধ্যে শেষ
-              },
+           
+            query.eventDateTime = {
+              $gte: startDate.toISOString(),
+              $lte: endDate.toISOString()
             };
           }
         }
 
-        // ডাটাবেজ থেকে ইভেন্ট খুঁজুন (প্রয়োজনে ফিল্টারসহ) এবং তারিখ অনুযায়ী সাজান
-        const events = await phCollectionEvent
-          .find(query)
-          .sort({ eventDateTime: -1 })
-          .toArray();
-
-        // ক্লায়েন্টকে ফলাফল পাঠিয়ে দিন
+        
+        const events = await phCollectionEvent.find(query).sort({ eventDateTime: -1 }).toArray();
+        
+        
         res.json({ success: true, events });
+
       } catch (error) {
         console.error("Failed to fetch events:", error);
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Server error while fetching events",
-          });
+        res.status(500).json({ success: false, message: "Server error while fetching events" });
       }
     });
 
