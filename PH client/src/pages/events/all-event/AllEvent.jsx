@@ -3,8 +3,10 @@ import React, { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaSearch, FaTimes, FaUserFriends, FaUser } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import Swal from "sweetalert2";
 import axiosSecure from "../../../utils/axiosSecure";
 import nodata from "/nodata.svg";
+import useProfile from "../../../hooks/getUserProfile";
 
 const FILTERS = [
   { value: "", label: "All Time" },
@@ -15,7 +17,6 @@ const FILTERS = [
   { value: "last_month", label: "Last Month" },
 ];
 
-// Marquee component for placeholder animation
 function MarqueePlaceholder({ text }) {
   return (
     <div className="overflow-hidden w-full h-6 flex items-center relative">
@@ -42,6 +43,8 @@ export default function AllEvents() {
   const [searchInput, setSearchInput] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
 
+  const { data: user, error } = useProfile();
+
   // Compose query string for API
   const queryKey = useMemo(
     () => ["/events", { filter, search }],
@@ -49,7 +52,7 @@ export default function AllEvents() {
   );
 
   // Data fetching with TanStack Query
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey,
     queryFn: async () => {
       const url = `/events?filter=${filter}&search=${search}`;
@@ -69,9 +72,62 @@ export default function AllEvents() {
   // Filter change handler
   const handleFilter = (e) => setFilter(e.target.value);
 
-  // Card click handler
-  const handleCardClick = (event) => setSelectedEvent(event);
+  // Card click handler (only modal, not join)
+  const handleCardClick = (e, event) => {
+    // if the clicked element is the join button or inside it, don't open modal
+    if (
+      e.target.closest(".join-event-btn")
+    ) {
+      return;
+    }
+    setSelectedEvent(event);
+  };
   const handleCloseModal = () => setSelectedEvent(null);
+
+  // Join event handler (SweetAlert)
+  const handleJoinEvent = async (eventId) => {
+    if (!user || !user.user.email) {
+      Swal.fire({
+        icon: "info",
+        title: "Please log in",
+        text: "You need to be logged in to join an event.",
+        confirmButtonColor: "#7F0B0B",
+      });
+      return;
+    }
+
+    try {
+      const joinData = {
+        eventId: eventId,
+        userEmail: user.user.email,
+        attendeeCount: 1,
+      };
+      const response = await axiosSecure.patch("/join-event", joinData);
+      if (response.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Joined!",
+          text: "You have successfully joined the event!",
+          confirmButtonColor: "#7F0B0B",
+        });
+        refetch();
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Could not join",
+          text: response.data.message || "You may have already joined.",
+          confirmButtonColor: "#7F0B0B",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Join failed",
+        text: "You could not join your own event.",
+        confirmButtonColor: "#7F0B0B",
+      });
+    }
+  };
 
   // Details Modal
   function DetailsModal({ event, onClose }) {
@@ -109,8 +165,13 @@ export default function AllEvents() {
                   </div>
                   {event.eventDateTime && (
                     <div className="text-[#FFDF8B] text-base font-semibold flex items-center gap-1 drop-shadow-sm">
-                      <span role="img" aria-label="calendar">📅</span>
-                      {new Date(event.eventDateTime).toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" })}
+                      <span role="img" aria-label="calendar">
+                        📅
+                      </span>
+                      {new Date(event.eventDateTime).toLocaleString(undefined, {
+                        dateStyle: "full",
+                        timeStyle: "short",
+                      })}
                     </div>
                   )}
                 </div>
@@ -130,26 +191,51 @@ export default function AllEvents() {
                   <span className="font-bold text-[#7F0B0B]">
                     {event.createdBy?.user || event.createdBy || "Unknown"}
                   </span>
-                  <span className="ml-1 text-[#590000] text-xs font-semibold">Organizer</span>
+                  <span className="ml-1 text-[#590000] text-xs font-semibold">
+                    Organizer
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 bg-white rounded-xl px-4 py-1 shadow border border-[#7F0B0B]/10">
                   <FaUserFriends className="text-[#7F0B0B] text-lg" />
-                  <span className="font-bold text-[#7F0B0B]">{event.attendeeCount || 0}</span>
-                  <span className="ml-1 text-[#590000] text-xs font-semibold">Attendees</span>
+                  <span className="font-bold text-[#7F0B0B]">
+                    {event.attendeeCount || 0}
+                  </span>
+                  <span className="ml-1 text-[#590000] text-xs font-semibold">
+                    Attendees
+                  </span>
                 </div>
               </div>
               {/* Location */}
               <div className="px-8 mt-2 mb-2 flex flex-wrap gap-2 items-center">
                 <div className="flex items-center gap-1 text-[#7F0B0B]/90 text-base font-semibold">
                   <span className="font-bold">Location:</span>
-                  {event.location?.division && <span>{event.location.division}</span>}
-                  {event.location?.district && <> → <span>{event.location.district}</span></>}
-                  {event.location?.upazila && <> → <span>{event.location.upazila}</span></>}
-                  {event.location?.union && <> → <span>{event.location.union}</span></>}
+                  {event.location?.division && (
+                    <span>{event.location.division}</span>
+                  )}
+                  {event.location?.district && (
+                    <>
+                      {" "}
+                      → <span>{event.location.district}</span>
+                    </>
+                  )}
+                  {event.location?.upazila && (
+                    <>
+                      {" "}
+                      → <span>{event.location.upazila}</span>
+                    </>
+                  )}
+                  {event.location?.union && (
+                    <>
+                      {" "}
+                      → <span>{event.location.union}</span>
+                    </>
+                  )}
                 </div>
                 {event.address && (
                   <div className="text-[#590000]/90 text-sm italic flex-1 whitespace-nowrap overflow-x-auto">
-                    {event?.address?.Textlocation || event?.address || "No specific address provided"}
+                    {event?.address?.Textlocation ||
+                      event?.address ||
+                      "No specific address provided"}
                   </div>
                 )}
               </div>
@@ -160,7 +246,8 @@ export default function AllEvents() {
                 </div>
                 <div className="flex justify-end">
                   <button
-                    className="bg-gradient-to-r from-[#7F0B0B] to-[#590000] text-white font-bold rounded-full px-7 py-2 shadow-lg hover:scale-[1.04] active:scale-100 transition-all duration-200"
+                    className="bg-gradient-to-r from-[#7F0B0B] to-[#590000] text-white font-bold rounded-full px-7 py-2 shadow-lg hover:scale-[1.04] active:scale-100 transition-all duration-200 join-event-btn"
+                    onClick={() => handleJoinEvent(event._id)}
                   >
                     Join Event
                   </button>
@@ -190,7 +277,7 @@ export default function AllEvents() {
               <input
                 type="text"
                 value={searchInput}
-                onChange={e => setSearchInput(e.target.value)}
+                onChange={(e) => setSearchInput(e.target.value)}
                 placeholder=""
                 className="w-full rounded-full border-2 border-[#7F0B0B]/30 focus:border-[#7F0B0B] px-5 py-3 text-lg font-medium text-[#590000] bg-white outline-none transition"
                 style={{ paddingRight: 52 }}
@@ -218,7 +305,7 @@ export default function AllEvents() {
               onChange={handleFilter}
               className="w-full rounded-full border-2 border-[#7F0B0B]/30 focus:border-[#7F0B0B] px-4 py-3 text-lg font-semibold text-[#7F0B0B] bg-white outline-none transition"
             >
-              {FILTERS.map(f => (
+              {FILTERS.map((f) => (
                 <option value={f.value} key={f.value}>
                   {f.label}
                 </option>
@@ -240,13 +327,14 @@ export default function AllEvents() {
           </div>
         ) : data && data.length > 0 ? (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
-            {data.map(event => (
+            {data.map((event) => (
               <motion.div
                 key={event._id || event.id}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 className="bg-white rounded-3xl shadow-xl border border-[#7F0B0B]/10 flex flex-col group transition-all duration-300 hover:shadow-2xl hover:z-10 cursor-pointer"
-                onClick={() => handleCardClick(event)}
+                onClick={(e) => handleCardClick(e, event)}
+                style={{ marginBottom: '0.5rem', padding: '0.5rem 0.2rem' }}
               >
                 {/* Card Header: Title */}
                 <div className="p-5 pb-3 flex-1 flex flex-col">
@@ -259,32 +347,58 @@ export default function AllEvents() {
                   <div>
                     <div className="text-[#590000] text-sm mb-1 flex items-center gap-1">
                       <FaUser className="text-[#7F0B0B] mr-1" />
-                      <span className="font-semibold">Organizer:</span> {event.createdBy?.user || event.createdBy || "Unknown"}
+                      <span className="font-semibold">Organizer:</span>{" "}
+                      {event.createdBy?.user || event.createdBy || "Unknown"}
                     </div>
                     {/* attendeeCount */}
                     <div className="text-[#590000] text-sm mb-1 flex items-center gap-1">
                       <FaUserFriends className="text-[#7F0B0B] mr-1" />
-                      <span className="font-semibold">Attendees:</span> {event.attendeeCount || 0}
+                      <span className="font-semibold">Attendees:</span>{" "}
+                      {event.attendeeCount || 0}
                     </div>
                   </div>
                   {/* Date & Time */}
                   {event.eventDateTime && (
                     <div className="text-[#590000] text-base font-semibold mb-1 flex items-center gap-1">
-                      <span role="img" aria-label="calendar">📅</span>
-                      {new Date(event.eventDateTime).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
+                      <span role="img" aria-label="calendar">
+                        📅
+                      </span>
+                      {new Date(event.eventDateTime).toLocaleString(undefined, {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      })}
                     </div>
                   )}
                   {/* Location preview */}
                   <div className="text-[#7F0B0B]/80 text-sm mb-1 font-semibold flex flex-wrap gap-1">
-                    {event.location?.division && <span>{event.location.division}</span>}
-                    {event.location?.district && <> → <span>{event.location.district}</span></>}
-                    {event.location?.upazila && <> → <span>{event.location.upazila}</span></>}
-                    {event.location?.union && <> → <span>{event.location.union}</span></>}
+                    {event.location?.division && (
+                      <span>{event.location.division}</span>
+                    )}
+                    {event.location?.district && (
+                      <>
+                        {" "}
+                        → <span>{event.location.district}</span>
+                      </>
+                    )}
+                    {event.location?.upazila && (
+                      <>
+                        {" "}
+                        → <span>{event.location.upazila}</span>
+                      </>
+                    )}
+                    {event.location?.union && (
+                      <>
+                        {" "}
+                        → <span>{event.location.union}</span>
+                      </>
+                    )}
                   </div>
                   {/* Address */}
                   {event.address && (
                     <div className="text-[#590000]/90 text-xs mt-1 mb-2 italic">
-                      {event?.address?.Textlocation || event?.address || "No specific address provided"}
+                      {event?.address?.Textlocation ||
+                        event?.address ||
+                        "No specific address provided"}
                     </div>
                   )}
                   {/* Description */}
@@ -297,8 +411,13 @@ export default function AllEvents() {
                 {/* Card Footer: Join Button */}
                 <div className="px-5 pb-5 flex items-end">
                   <button
-                    className="w-full bg-gradient-to-r from-[#7F0B0B] to-[#590000] text-white font-bold rounded-full py-2 mt-3 shadow-lg hover:scale-[1.04] active:scale-100 transition-all duration-200 group-hover:bg-[#7F0B0B]/90"
+                    className="join-event-btn w-full bg-gradient-to-r from-[#7F0B0B] to-[#590000] text-white font-bold rounded-full py-2 mt-3 shadow-lg hover:scale-[1.04] active:scale-100 transition-all duration-200 group-hover:bg-[#7F0B0B]/90"
                     tabIndex={-1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleJoinEvent(event._id);
+                    }}
+                    style={{ marginTop: '0.5rem', padding: '0.7rem 0' }}
                   >
                     Join Event
                   </button>
@@ -308,7 +427,11 @@ export default function AllEvents() {
           </div>
         ) : (
           <div className="w-full flex flex-col justify-center items-center mt-16 text-[#7F0B0B] text-2xl font-bold">
-            <img className="w-[80%] max-w-[400px] object-cover h-auto" src={nodata} alt="No data available" />
+            <img
+              className="w-[80%] max-w-[400px] object-cover h-auto"
+              src={nodata}
+              alt="No data available"
+            />
             <div>No events found.</div>
           </div>
         )}
