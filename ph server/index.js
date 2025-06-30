@@ -181,45 +181,39 @@ async function run() {
     //   res.json({ success: true, events });
     // });
 
-     app.get("/events", verifyToken, async (req, res) => {
+    app.get("/events", verifyToken, async (req, res) => {
       try {
-       
         const { filter, search } = req.query;
         const today = new Date();
-        
-       
+
         let query = {};
 
-       
         if (search) {
-          
           query.title = { $regex: search, $options: "i" };
         }
 
-        
         if (filter) {
           let startDate, endDate;
 
-         
           switch (filter) {
-            case 'today':
+            case "today":
               startDate = startOfDay(today);
               endDate = endOfDay(today);
               break;
-            case 'current_week':
+            case "current_week":
               startDate = startOfWeek(today);
               endDate = endOfWeek(today);
               break;
-            case 'last_week':
+            case "last_week":
               const dateInLastWeek = subWeeks(today, 1);
               startDate = startOfWeek(dateInLastWeek);
               endDate = endOfWeek(dateInLastWeek);
               break;
-            case 'current_month':
+            case "current_month":
               startDate = startOfMonth(today);
               endDate = endOfMonth(today);
               break;
-            case 'last_month':
+            case "last_month":
               const dateInLastMonth = subMonths(today, 1);
               startDate = startOfMonth(dateInLastMonth);
               endDate = endOfMonth(dateInLastMonth);
@@ -228,25 +222,97 @@ async function run() {
               break;
           }
 
-          
           if (startDate && endDate) {
-           
             query.eventDateTime = {
               $gte: startDate.toISOString(),
-              $lte: endDate.toISOString()
+              $lte: endDate.toISOString(),
             };
           }
         }
 
-        
-        const events = await phCollectionEvent.find(query).sort({ eventDateTime: -1 }).toArray();
-        
-        
-        res.json({ success: true, events });
+        const events = await phCollectionEvent
+          .find(query)
+          .sort({ eventDateTime: -1 })
+          .toArray();
 
+        res.json({ success: true, events });
       } catch (error) {
         console.error("Failed to fetch events:", error);
-        res.status(500).json({ success: false, message: "Server error while fetching events" });
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Server error while fetching events",
+          });
+      }
+    });
+
+    // patch event
+    app.patch("/join-event", verifyToken, async (req, res) => {
+      try {
+        // ক্লায়েন্টের body থেকে eventId এবং userEmail নিন
+        const { eventId, userEmail } = req.body;
+
+        // eventId বা userEmail না থাকলে এরর পাঠান
+        if (!eventId || !userEmail) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "Event ID and user email are required.",
+            });
+        }
+
+        // প্রথমে ইভেন্টটি খুঁজে বের করুন
+        const event = await phCollectionEvent.findOne({
+          _id: new ObjectId(eventId),
+        });
+
+        // যদি ইভেন্ট খুঁজে না পাওয়া যায়
+        if (!event) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Event not found." });
+        }
+
+        if ((event.attendeeUsers && event.attendeeUsers.includes(userEmail)) || event.createdBy.userMail === userEmail) {
+          return res
+            .status(409)
+            .json({
+              success: false,
+              message: "You have already joined this event.",
+            });
+        }
+
+        // ডাটাবেজে ইভেন্টটি আপডেট করুন
+        const result = await phCollectionEvent.updateOne(
+          { _id: new ObjectId(eventId) }, // কোন ইভেন্টটি আপডেট করতে হবে তা খুঁজুন
+          {
+            // $inc অপারেটর ব্যবহার করে attendeeCount এর মান ১ বাড়ান
+            // যদি attendeeCount ফিল্ডটি না থাকে, তবে এটি তৈরি করে মান ১ করে দেবে
+            $inc: { attendeeCount: 1 },
+
+            // $addToSet অপারেটর ব্যবহার করে attendeeUsers অ্যারেতে নতুন ইমেইল যোগ করুন
+            // যদি ইমেইলটি আগে থেকেই থাকে, তবে এটি কিছুই করবে না (ডুপ্লিকেট এড়ানোর জন্য)
+            $addToSet: { attendeeUsers: userEmail },
+          }
+        );
+
+        // যদি আপডেট সফল হয়
+        if (result.modifiedCount > 0) {
+          res.json({
+            success: true,
+            message: "Successfully joined the event!",
+          });
+        } else {
+          // যদি কোনো কারণে আপডেট না হয় (যেমন: একই ইউজার আবার চেষ্টা করলে)
+          res
+            .status(400)
+            .json({ success: false, message: "Could not join the event." });
+        }
+      } catch (error) {
+        console.error("Error in /join-event route:", error);
+        res.status(500).json({ success: false, message: "Server error." });
       }
     });
 
