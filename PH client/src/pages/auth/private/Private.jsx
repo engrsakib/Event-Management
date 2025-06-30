@@ -13,7 +13,7 @@ const Privete = ({ children }) => {
     setUser(data?.user);
   }, [data]);
 
-  if (isLoading || isError || !user || !user?.email) {
+  if (isLoading) {
     return <Loading/>;
   }
 
