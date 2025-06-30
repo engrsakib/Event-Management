@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
@@ -17,13 +18,14 @@ export default function AddEvents() {
     division: "",
     district: "",
     upazila: "",
-    union: ""
+    union: "",
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useProfile();
 
   const user = data?.user?.name || "User";
+  const userMail = data?.user?.email || "user@example.com";
 
   // Validate all fields
   const isValid = () =>
@@ -51,11 +53,19 @@ export default function AddEvents() {
     try {
       const res = await axiosSecure.post("/add-events", {
         title: eventTitle,
-        location,
-        address: Textlocation,
+
+        address: {
+          location: {
+            division: location.division,
+            district: location.district,
+            upazila: location.upazila,
+            union: location.union,
+          },
+          Textlocation,
+        },
         description,
         eventDateTime,
-        createdBy: user,
+        createdBy: { user, userMail },
       });
       if (res.status === 200 || res.status === 201) {
         Swal.fire({
@@ -87,7 +97,9 @@ export default function AddEvents() {
         className="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-8 md:p-12 space-y-7 border border-[#7F0B0B]/15"
         onSubmit={handleSubmit}
       >
-        <h2 className="text-3xl font-extrabold text-center text-[#7F0B0B] mb-2 tracking-tight">Add New Event</h2>
+        <h2 className="text-3xl font-extrabold text-center text-[#7F0B0B] mb-2 tracking-tight">
+          Add New Event
+        </h2>
 
         {/* User Name (Read-only) */}
         <div>
@@ -104,14 +116,17 @@ export default function AddEvents() {
 
         {/* Event Title */}
         <div>
-          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="eventTitle">
+          <label
+            className="block mb-2 text-lg font-semibold text-[#7F0B0B]"
+            htmlFor="eventTitle"
+          >
             Event Title <span className="text-red-500">*</span>
           </label>
           <input
             id="eventTitle"
             name="eventTitle"
             value={eventTitle}
-            onChange={e => setEventTitle(e.target.value)}
+            onChange={(e) => setEventTitle(e.target.value)}
             type="text"
             placeholder="Enter event title"
             className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/20 outline-none transition bg-gray-50"
@@ -121,7 +136,10 @@ export default function AddEvents() {
 
         {/* Date & Time Picker */}
         <div>
-          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="eventDateTime">
+          <label
+            className="block mb-2 text-lg font-semibold text-[#7F0B0B]"
+            htmlFor="eventDateTime"
+          >
             Event Date & Time <span className="text-red-500">*</span>
           </label>
           <input
@@ -129,7 +147,7 @@ export default function AddEvents() {
             name="eventDateTime"
             type="datetime-local"
             value={eventDateTime}
-            onChange={e => setEventDateTime(e.target.value)}
+            onChange={(e) => setEventDateTime(e.target.value)}
             className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/20 outline-none transition bg-gray-50"
             required
           />
@@ -138,21 +156,25 @@ export default function AddEvents() {
         {/* select location */}
         <div>
           <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]">
-            Location (Division/District/Upazila/Union) <span className="text-red-500">*</span>
+            Location (Division/District/Upazila/Union){" "}
+            <span className="text-red-500">*</span>
           </label>
           <LocationPicker location={location} setLocation={setLocation} />
         </div>
 
         {/* Address (Textarea) */}
         <div>
-          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="address">
+          <label
+            className="block mb-2 text-lg font-semibold text-[#7F0B0B]"
+            htmlFor="address"
+          >
             Address <span className="text-red-500">*</span>
           </label>
           <textarea
             id="address"
             name="address"
             value={Textlocation}
-            onChange={e => setTextLocation(e.target.value)}
+            onChange={(e) => setTextLocation(e.target.value)}
             rows={3}
             placeholder="Event location details"
             className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/20 outline-none transition bg-gray-50 resize-none"
@@ -162,14 +184,17 @@ export default function AddEvents() {
 
         {/* Description */}
         <div>
-          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="description">
+          <label
+            className="block mb-2 text-lg font-semibold text-[#7F0B0B]"
+            htmlFor="description"
+          >
             Description <span className="text-red-500">*</span>
           </label>
           <textarea
             id="description"
             name="description"
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             rows={5}
             placeholder="Event description"
             className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/20 outline-none transition bg-gray-50 resize-none"

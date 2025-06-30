@@ -50,7 +50,7 @@ export default function LocationPicker({ location, setLocation }) {
         .catch(err => console.error(err))
         .finally(() => setLoading(l => ({ ...l, district: false })));
     }
-  }, [selectedDivision, divisions]);
+  }, [selectedDivision, divisions, setLocation]);
 
   useEffect(() => {
     if (selectedDistrict) {
@@ -66,7 +66,7 @@ export default function LocationPicker({ location, setLocation }) {
         .catch(err => console.error(err))
         .finally(() => setLoading(l => ({ ...l, upazila: false })));
     }
-  }, [selectedDistrict, districts]);
+  }, [selectedDistrict, districts, setLocation]);
 
   useEffect(() => {
     if (selectedUpazila) {
@@ -80,14 +80,14 @@ export default function LocationPicker({ location, setLocation }) {
         .catch(err => console.error(err))
         .finally(() => setLoading(l => ({ ...l, union: false })));
     }
-  }, [selectedUpazila, upazilas]);
+  }, [selectedUpazila, upazilas, setLocation]);
 
   useEffect(() => {
     if (selectedUnion) {
       const selected = unions.find(u => u.id === selectedUnion);
       setLocation(prev => ({ ...prev, union: selected?.name || "" }));
     }
-  }, [selectedUnion, unions]);
+  }, [selectedUnion, unions, setLocation]);
 
   // Optional: log full location object
   useEffect(() => {
