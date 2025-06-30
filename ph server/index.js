@@ -275,12 +275,19 @@ async function run() {
             .json({ success: false, message: "Event not found." });
         }
 
-        if ((event.attendeeUsers && event.attendeeUsers.includes(userEmail)) || event.createdBy.userMail === userEmail) {
+        if ((event.attendeeUsers && event.attendeeUsers.includes(userEmail))) {
           return res
             .status(409)
             .json({
               success: false,
               message: "You have already joined this event.",
+            });
+        }else if(event.createdBy.userMail === userEmail){
+          return res
+            .status(403)
+            .json({
+              success: false,
+              message: "You cannot join your own event.",
             });
         }
 
