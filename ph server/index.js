@@ -252,12 +252,10 @@ async function run() {
         console.log(req.query);
 
         if (!id) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: "Event ID is required in the request body.",
-            });
+          return res.status(400).json({
+            success: false,
+            message: "Event ID is required in the request body.",
+          });
         }
 
         const event = await phCollectionEvent.findOne({
@@ -273,11 +271,90 @@ async function run() {
         res.json({ success: true, event });
       } catch (error) {
         console.error("Failed to fetch event:", error);
+        res.status(500).json({
+          success: false,
+          message: "Server error while fetching event",
+        });
+      }
+    });
+
+    // events update
+    app.patch("/update-event", verifyToken, async (req, res) => {
+      try {
+        
+        const {
+          id: eventId,
+          title,
+          address,
+          description,
+          eventDateTime,
+        } = req.body;
+        const userEmail = req.decoded.email;
+
+        
+        if (!eventId) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Event ID is required." });
+        }
+
+        
+        const event = await phCollectionEvent.findOne({
+          _id: new ObjectId(eventId),
+        });
+
+        
+        if (!event) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Event not found." });
+        }
+
+        
+        if (event.createdBy.userMail !== userEmail) {
+          return res
+            .status(403)
+            .json({
+              success: false,
+              message: "You do not have permission to update this event.",
+            });
+        }
+
+       
+        const updatedEventData = {
+          title,
+          address,
+          description,
+          eventDateTime,
+        };
+
+        
+        const result = await phCollectionEvent.updateOne(
+          { _id: new ObjectId(eventId) },
+          { $set: updatedEventData }
+        );
+
+        
+        if (result.modifiedCount > 0) {
+          res
+            .status(200)
+            .json({ success: true, message: "Event updated successfully." });
+        } else {
+          // যদি কোনো পরিবর্তন না হয় (যেমন: একই ডেটা আবার পাঠানো হলে)
+          res
+            .status(200)
+            .json({
+              success: true,
+              message: "No changes were made to the event.",
+            });
+        }
+      } catch (error) {
+        console.error("Failed to update event:", error);
         res
           .status(500)
           .json({
             success: false,
-            message: "Server error while fetching event",
+            message: "Server error while updating the event.",
           });
       }
     });
@@ -288,12 +365,10 @@ async function run() {
         const userEmail = req.decoded.email;
 
         if (!userEmail) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: "User email not found in token.",
-            });
+          return res.status(400).json({
+            success: false,
+            message: "User email not found in token.",
+          });
         }
 
         // console.log(`Fetching events for user: ${userEmail}`); // ডিবাগিং এর জন্য
@@ -307,12 +382,10 @@ async function run() {
         res.json({ success: true, events });
       } catch (error) {
         console.error("Failed to fetch user's events:", error);
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Server error while fetching user's events",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Server error while fetching user's events",
+        });
       }
     });
 
@@ -325,12 +398,10 @@ async function run() {
         const userEmail = req.decoded.email;
 
         if (!eventId) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: "Event ID is required in the request body.",
-            });
+          return res.status(400).json({
+            success: false,
+            message: "Event ID is required in the request body.",
+          });
         }
 
         const event = await phCollectionEvent.findOne({
@@ -344,12 +415,10 @@ async function run() {
         }
 
         if (event.createdBy.userMail !== userEmail) {
-          return res
-            .status(403)
-            .json({
-              success: false,
-              message: "You do not have permission to delete this event.",
-            });
+          return res.status(403).json({
+            success: false,
+            message: "You do not have permission to delete this event.",
+          });
         }
 
         const result = await phCollectionEvent.deleteOne({
@@ -365,12 +434,10 @@ async function run() {
         }
       } catch (error) {
         console.error("Failed to delete event:", error);
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Server error while deleting the event.",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Server error while deleting the event.",
+        });
       }
     });
 
