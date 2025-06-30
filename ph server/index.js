@@ -268,21 +268,20 @@ async function run() {
     // get all events created by a specific user
    app.get("/my-events", verifyToken, async (req, res) => {
   try {
-    // verifyToken মিডলওয়্যার থেকে পাওয়া ডিকোড করা টোকেন থেকে ইমেইল নিন
+    
     const userEmail = req.decoded.email;
 
-    // যদি টোকেনে ইমেইল না থাকে, তবে একটি এরর রেসপন্স পাঠান
+    
     if (!userEmail) {
       return res.status(400).json({ success: false, message: "User email not found in token." });
     }
 
     // console.log(`Fetching events for user: ${userEmail}`); // ডিবাগিং এর জন্য
 
-    // ডাটাবেজ থেকে সেইসব ইভেন্ট খুঁজুন যেখানে 'createdBy.userMail' ফিল্ডটি
-    // টোকেনে থাকা ব্যবহারকারীর ইমেইলের সাথে মিলে যায়।
+    
     const events = await phCollectionEvent
-      .find({ "createdBy.userMail": userEmail }) // আপডেট করা কোয়েরি
-      .sort({ eventDateTime: -1 }) // নতুন থেকে পুরনো ক্রমে সাজানো
+      .find({ "createdBy.userMail": userEmail }) 
+      .sort({ eventDateTime: -1 }) 
       .toArray();
 
     // ক্লায়েন্টকে ফলাফল পাঠিয়ে দিন
@@ -295,9 +294,52 @@ async function run() {
 });
 
 
-    // patch event
-    app.patch("/join-event", verifyToken, async (req, res) => {
-      try {
+
+// delete event
+app.delete("/events-delete", verifyToken, async (req, res) => {
+  try {
+    const eventId  = req.body.eventId;
+    // console.log(req.body.eventId);
+    // console.log(eventId);
+    const userEmail = req.decoded.email;
+
+    
+    if (!eventId) {
+      return res.status(400).json({ success: false, message: "Event ID is required in the request body." });
+    }
+
+    
+    const event = await phCollectionEvent.findOne({ _id: new ObjectId(eventId) });
+
+   
+    if (!event) {
+      return res.status(404).json({ success: false, message: "Event not found." });
+    }
+
+   
+    if (event.createdBy.userMail !== userEmail) {
+      return res.status(403).json({ success: false, message: "You do not have permission to delete this event." });
+    }
+
+   
+    const result = await phCollectionEvent.deleteOne({ _id: new ObjectId(eventId) });
+
+    
+    if (result.deletedCount > 0) {
+      res.json({ success: true, message: "Event deleted successfully." });
+    } else {
+    
+      res.status(400).json({ success: false, message: "Event could not be deleted." });
+    }
+  } catch (error) {
+    console.error("Failed to delete event:", error);
+    res.status(500).json({ success: false, message: "Server error while deleting the event." });
+  }
+});
+
+// patch event
+app.patch("/join-event", verifyToken, async (req, res) => {
+  try {
         // ক্লায়েন্টের body থেকে eventId এবং userEmail নিন
         const { eventId, userEmail } = req.body;
 
