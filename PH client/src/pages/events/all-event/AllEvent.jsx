@@ -75,9 +75,7 @@ export default function AllEvents() {
   // Card click handler (only modal, not join)
   const handleCardClick = (e, event) => {
     // if the clicked element is the join button or inside it, don't open modal
-    if (
-      e.target.closest(".join-event-btn")
-    ) {
+    if (e.target.closest(".join-event-btn")) {
       return;
     }
     setSelectedEvent(event);
@@ -120,12 +118,21 @@ export default function AllEvents() {
         });
       }
     } catch (error) {
-      Swal.fire({
+      if (error.response.status === 409) {
+        Swal.fire({
+          icon: "error",
+          title: "Join failed",
+          text: "You have already joined this event.",
+          confirmButtonColor: "#7F0B0B",
+        });
+      }else{
+        Swal.fire({
         icon: "error",
         title: "Join failed",
         text: "You could not join your own event.",
         confirmButtonColor: "#7F0B0B",
       });
+      }
     }
   };
 
@@ -334,7 +341,7 @@ export default function AllEvents() {
                 whileTap={{ scale: 0.97 }}
                 className="bg-white rounded-3xl shadow-xl border border-[#7F0B0B]/10 flex flex-col group transition-all duration-300 hover:shadow-2xl hover:z-10 cursor-pointer"
                 onClick={(e) => handleCardClick(e, event)}
-                style={{ marginBottom: '0.5rem', padding: '0.5rem 0.2rem' }}
+                style={{ marginBottom: "0.5rem", padding: "0.5rem 0.2rem" }}
               >
                 {/* Card Header: Title */}
                 <div className="p-5 pb-3 flex-1 flex flex-col">
@@ -417,7 +424,7 @@ export default function AllEvents() {
                       e.stopPropagation();
                       handleJoinEvent(event._id);
                     }}
-                    style={{ marginTop: '0.5rem', padding: '0.7rem 0' }}
+                    style={{ marginTop: "0.5rem", padding: "0.7rem 0" }}
                   >
                     Join Event
                   </button>
