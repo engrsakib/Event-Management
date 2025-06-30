@@ -6,6 +6,7 @@ import axios from "axios";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { Link, useNavigate } from "react-router";
+import { QueryClient } from "@tanstack/react-query";
 
 const BASE_URL = import.meta.env.VITE_ADMIN_URL;
 
@@ -55,7 +56,9 @@ export default function LogIn() {
       const token = response.data.token;
       if (token) {
         localStorage.setItem("token", token);
-        navigate("/");
+        // QueryClient.invalidateQueries({ queryKey: ['profile'] });
+        window.location = "/"; // Redirect to home page
+        // navigate("/"); // Alternatively, you can use navigate if you want to use react-router
       } else {
         setError("No token received from server.");
       }

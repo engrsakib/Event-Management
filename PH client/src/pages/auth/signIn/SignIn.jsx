@@ -78,7 +78,9 @@ export default function SignUp() {
         const token = res.data.token;
       if (token) {
         localStorage.setItem("token", token);
-        navigate("/");
+        // navigate("/");
+        window.location = "/"; // Redirect to home page
+        // QueryClient.invalidateQueries({ queryKey: ['profile'] });
       } else {
         setError("No token received from server.");
       }

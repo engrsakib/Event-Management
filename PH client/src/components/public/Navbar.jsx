@@ -24,9 +24,11 @@ const Navbar = () => {
   useEffect(() => {
     setUser(data?.user);
     setIsLoggingIn(user?.email ? true : false);
+    
   }, [data, user]);
+   
+  
 
-  // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
