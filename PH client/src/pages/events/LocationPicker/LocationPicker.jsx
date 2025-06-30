@@ -6,7 +6,7 @@ const PRIMARY = "#7F0B0B";
 const SECONDARY = "#590000";
 const HIGHLIGHT = "#FFDF8B";
 
-export default function LocationPicker() {
+export default function LocationPicker({ location, setLocation }) {
   const [divisions, setDivisions] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
@@ -16,14 +16,6 @@ export default function LocationPicker() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedUpazila, setSelectedUpazila] = useState("");
   const [selectedUnion, setSelectedUnion] = useState("");
-
-  const [location, setLocation] = useState({
-    division: "",
-    district: "",
-    upazila: "",
-    union: ""
-  });
-
     
 
   // For loading state of dropdowns
@@ -168,7 +160,7 @@ export default function LocationPicker() {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="w-full max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
       <FancySelect
         label="Division"
         value={selectedDivision}

@@ -1,23 +1,40 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import axios from "axios";
 import LocationPicker from "../LocationPicker/LocationPicker";
+import useProfile from "../../../hooks/getUserProfile";
 
 // Change this to your secure axios instance if needed
 const axiosSecure = axios;
 
 export default function AddEvents() {
   const [eventTitle, setEventTitle] = useState("");
-  const [location, setLocation] = useState("");
+  const [Textlocation, setTextLocation] = useState("");
   const [description, setDescription] = useState("");
+  const [eventDateTime, setEventDateTime] = useState("");
+  const [location, setLocation] = useState({
+    division: "",
+    district: "",
+    upazila: "",
+    union: ""
+  });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { data, isLoading, isError, error } = useProfile();
+
+  const user = data?.user?.name || "User";
 
   // Validate all fields
   const isValid = () =>
-    eventTitle.trim() && location.trim() && description.trim();
+    eventTitle.trim() &&
+    location.division &&
+    location.district &&
+    location.upazila &&
+    location.union &&
+    Textlocation.trim() &&
+    description.trim() &&
+    eventDateTime.trim();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +52,10 @@ export default function AddEvents() {
       const res = await axiosSecure.post("/add-events", {
         title: eventTitle,
         location,
+        address: Textlocation,
         description,
+        eventDateTime,
+        createdBy: user,
       });
       if (res.status === 200 || res.status === 201) {
         Swal.fire({
@@ -69,6 +89,19 @@ export default function AddEvents() {
       >
         <h2 className="text-3xl font-extrabold text-center text-[#7F0B0B] mb-2 tracking-tight">Add New Event</h2>
 
+        {/* User Name (Read-only) */}
+        <div>
+          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]">
+            Organizer <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={user}
+            readOnly
+            className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 bg-gray-100 cursor-not-allowed"
+          />
+        </div>
+
         {/* Event Title */}
         <div>
           <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="eventTitle">
@@ -86,24 +119,40 @@ export default function AddEvents() {
           />
         </div>
 
-        {/* select location */}
+        {/* Date & Time Picker */}
         <div>
-          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="location">
-            Location <span className="text-red-500">*</span>
+          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="eventDateTime">
+            Event Date & Time <span className="text-red-500">*</span>
           </label>
-          <LocationPicker/>
+          <input
+            id="eventDateTime"
+            name="eventDateTime"
+            type="datetime-local"
+            value={eventDateTime}
+            onChange={e => setEventDateTime(e.target.value)}
+            className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/20 outline-none transition bg-gray-50"
+            required
+          />
         </div>
 
-        {/* Location */}
+        {/* select location */}
         <div>
-          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="location">
-            Location <span className="text-red-500">*</span>
+          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]">
+            Location (Division/District/Upazila/Union) <span className="text-red-500">*</span>
+          </label>
+          <LocationPicker location={location} setLocation={setLocation} />
+        </div>
+
+        {/* Address (Textarea) */}
+        <div>
+          <label className="block mb-2 text-lg font-semibold text-[#7F0B0B]" htmlFor="address">
+            Address <span className="text-red-500">*</span>
           </label>
           <textarea
-            id="location"
-            name="location"
-            value={location}
-            onChange={e => setLocation(e.target.value)}
+            id="address"
+            name="address"
+            value={Textlocation}
+            onChange={e => setTextLocation(e.target.value)}
             rows={3}
             placeholder="Event location details"
             className="w-full rounded-xl px-4 py-3 text-[#590000] text-base font-medium border-2 border-[#7F0B0B]/20 focus:border-[#7F0B0B] focus:ring-2 focus:ring-[#7F0B0B]/20 outline-none transition bg-gray-50 resize-none"
