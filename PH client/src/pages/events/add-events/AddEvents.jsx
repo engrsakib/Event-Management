@@ -5,9 +5,10 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import LocationPicker from "../LocationPicker/LocationPicker";
 import useProfile from "../../../hooks/getUserProfile";
+import axiosSecure from "../../../utils/axiosSecure";
 
 // Change this to your secure axios instance if needed
-const axiosSecure = axios;
+
 
 export default function AddEvents() {
   const [eventTitle, setEventTitle] = useState("");
@@ -53,7 +54,6 @@ export default function AddEvents() {
     try {
       const res = await axiosSecure.post("/add-events", {
         title: eventTitle,
-
         address: {
           location: {
             division: location.division,
