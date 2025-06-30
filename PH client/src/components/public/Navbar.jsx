@@ -6,15 +6,12 @@ import axios from "axios";
 import { Link } from "react-router";
 import Loading from "../../pages/loadding/Loading";
 
-const userMock = {
-  isLoggedIn: true,
-  profilePic: "https://randomuser.me/api/portraits/men/75.jpg", // Change to false/null for not logged in
-  name: "John Doe",
-};
+
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const [user, setUser] = useState(null);
   const { data, isLoading, isError, error } = useProfile();
@@ -26,7 +23,8 @@ const Navbar = () => {
   // user setter
   useEffect(() => {
     setUser(data?.user);
-  }, [data]);
+    setIsLoggingIn(user?.email ? true : false);
+  }, [data, user]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -45,9 +43,11 @@ const Navbar = () => {
   }, [dropdownOpen]);
 
   // loding and error handling
-  if (isLoading || isError || !user || !user?.email) {
+  if (isLoading) {
     return <Loading />;
   }
+
+  
 
   const handleLogout = async () => {
     try {
