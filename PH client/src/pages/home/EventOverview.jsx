@@ -2,7 +2,7 @@
 
 export default function EventOverview() {
   return (
-    <div className="w-11/12 lg:w-[80%] mx-auto p-8 bg-white">
+    <div className="w-11/12 lg:w-[80%] mx-auto p-8 mt-20 bg-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         {/* Left Column - Text Content */}
         <div className="space-y-6">
