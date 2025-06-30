@@ -21,7 +21,7 @@ const Navbar = () => {
 
   const dropdownRef = useRef(null);
 
-  const BASE_URL = import.meta.env.VITE_ADMIN_URL
+  const BASE_URL = import.meta.env.VITE_ADMIN_URL;
 
   // user setter
   useEffect(() => {
@@ -45,9 +45,9 @@ const Navbar = () => {
   }, [dropdownOpen]);
 
   // loding and error handling
-   if (isLoading || isError || !user || !user?.email) {
-      return <Loading/>;
-    }
+  if (isLoading || isError || !user || !user?.email) {
+    return <Loading />;
+  }
 
   const handleLogout = async () => {
     try {
@@ -77,16 +77,18 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo + Website Name */}
-          <div className="flex items-center gap-2">
-            <img
-              src={logo}
-              alt="Logo"
-              className="w-9 h-9 rounded-lg shadow-md"
-            />
-            <span className="text-white text-xl font-bold tracking-wide drop-shadow-lg">
-              Eventify
-            </span>
-          </div>
+          <Link to="/">
+            <div className="flex items-center gap-2">
+              <img
+                src={logo}
+                alt="Logo"
+                className="w-9 h-9 rounded-lg shadow-md"
+              />
+              <span className="text-white text-xl font-bold tracking-wide drop-shadow-lg">
+                Eventify
+              </span>
+            </div>
+          </Link>
           {/* Hamburger */}
           <div className="flex md:hidden">
             <button
