@@ -8,6 +8,7 @@ import AddEvents from "../pages/events/add-events/AddEvents";
 import Privete from "../pages/auth/private/Private";
 import AllEvent from "../pages/events/all-event/AllEvent";
 import MyEvents from "../pages/events/my-events/MyEvents";
+import EditEvents from "../pages/events/my-events/EditEvents";
 
 
 const router = createBrowserRouter([
@@ -48,6 +49,16 @@ const router = createBrowserRouter([
         element: (
           <Privete>
             <MyEvents/>
+          </Privete>
+
+        ),
+      
+      },
+      {
+        path: "/my-events/edit",
+        element: (
+          <Privete>
+            <EditEvents/>
           </Privete>
 
         ),
