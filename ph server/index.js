@@ -238,119 +238,154 @@ async function run() {
         res.json({ success: true, events });
       } catch (error) {
         console.error("Failed to fetch events:", error);
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Server error while fetching events",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Server error while fetching events",
+        });
       }
     });
 
     // get single event by id
-    app.get("/event/:id", verifyToken, async (req, res) => {
-      const { id } = req.params;
-
+    app.post("/event-details", verifyToken, async (req, res) => {
       try {
-        const event = await phCollectionEvent.findOne({ _id: new ObjectId(id) });
+        const { id } = req.body;
+        console.log(req.query);
+
+        if (!id) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "Event ID is required in the request body.",
+            });
+        }
+
+        const event = await phCollectionEvent.findOne({
+          _id: new ObjectId(id),
+        });
 
         if (!event) {
-          return res.status(404).json({ success: false, message: "Event not found." });
+          return res
+            .status(404)
+            .json({ success: false, message: "Event not found." });
         }
 
         res.json({ success: true, event });
       } catch (error) {
         console.error("Failed to fetch event:", error);
-        res.status(500).json({ success: false, message: "Server error while fetching event" });
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Server error while fetching event",
+          });
       }
     });
 
     // get all events created by a specific user
-   app.get("/my-events", verifyToken, async (req, res) => {
-  try {
-    
-    const userEmail = req.decoded.email;
+    app.get("/my-events", verifyToken, async (req, res) => {
+      try {
+        const userEmail = req.decoded.email;
 
-    
-    if (!userEmail) {
-      return res.status(400).json({ success: false, message: "User email not found in token." });
-    }
+        if (!userEmail) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "User email not found in token.",
+            });
+        }
 
-    // console.log(`Fetching events for user: ${userEmail}`); // ডিবাগিং এর জন্য
+        // console.log(`Fetching events for user: ${userEmail}`); // ডিবাগিং এর জন্য
 
-    
-    const events = await phCollectionEvent
-      .find({ "createdBy.userMail": userEmail }) 
-      .sort({ eventDateTime: -1 }) 
-      .toArray();
+        const events = await phCollectionEvent
+          .find({ "createdBy.userMail": userEmail })
+          .sort({ eventDateTime: -1 })
+          .toArray();
 
-    // ক্লায়েন্টকে ফলাফল পাঠিয়ে দিন
-    res.json({ success: true, events });
+        // ক্লায়েন্টকে ফলাফল পাঠিয়ে দিন
+        res.json({ success: true, events });
+      } catch (error) {
+        console.error("Failed to fetch user's events:", error);
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Server error while fetching user's events",
+          });
+      }
+    });
 
-  } catch (error) {
-    console.error("Failed to fetch user's events:", error);
-    res.status(500).json({ success: false, message: "Server error while fetching user's events" });
-  }
-});
+    // delete event
+    app.delete("/events-delete", verifyToken, async (req, res) => {
+      try {
+        const eventId = req.body.eventId;
+        // console.log(req.body.eventId);
+        // console.log(eventId);
+        const userEmail = req.decoded.email;
 
+        if (!eventId) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "Event ID is required in the request body.",
+            });
+        }
 
+        const event = await phCollectionEvent.findOne({
+          _id: new ObjectId(eventId),
+        });
 
-// delete event
-app.delete("/events-delete", verifyToken, async (req, res) => {
-  try {
-    const eventId  = req.body.eventId;
-    // console.log(req.body.eventId);
-    // console.log(eventId);
-    const userEmail = req.decoded.email;
+        if (!event) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Event not found." });
+        }
 
-    
-    if (!eventId) {
-      return res.status(400).json({ success: false, message: "Event ID is required in the request body." });
-    }
+        if (event.createdBy.userMail !== userEmail) {
+          return res
+            .status(403)
+            .json({
+              success: false,
+              message: "You do not have permission to delete this event.",
+            });
+        }
 
-    
-    const event = await phCollectionEvent.findOne({ _id: new ObjectId(eventId) });
+        const result = await phCollectionEvent.deleteOne({
+          _id: new ObjectId(eventId),
+        });
 
-   
-    if (!event) {
-      return res.status(404).json({ success: false, message: "Event not found." });
-    }
+        if (result.deletedCount > 0) {
+          res.json({ success: true, message: "Event deleted successfully." });
+        } else {
+          res
+            .status(400)
+            .json({ success: false, message: "Event could not be deleted." });
+        }
+      } catch (error) {
+        console.error("Failed to delete event:", error);
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Server error while deleting the event.",
+          });
+      }
+    });
 
-   
-    if (event.createdBy.userMail !== userEmail) {
-      return res.status(403).json({ success: false, message: "You do not have permission to delete this event." });
-    }
-
-   
-    const result = await phCollectionEvent.deleteOne({ _id: new ObjectId(eventId) });
-
-    
-    if (result.deletedCount > 0) {
-      res.json({ success: true, message: "Event deleted successfully." });
-    } else {
-    
-      res.status(400).json({ success: false, message: "Event could not be deleted." });
-    }
-  } catch (error) {
-    console.error("Failed to delete event:", error);
-    res.status(500).json({ success: false, message: "Server error while deleting the event." });
-  }
-});
-
-// patch event
-app.patch("/join-event", verifyToken, async (req, res) => {
-  try {
+    // patch event
+    app.patch("/join-event", verifyToken, async (req, res) => {
+      try {
         // ক্লায়েন্টের body থেকে eventId এবং userEmail নিন
         const { eventId, userEmail } = req.body;
 
         // eventId বা userEmail না থাকলে এরর পাঠান
         if (!eventId || !userEmail) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: "Event ID and user email are required.",
-            });
+          return res.status(400).json({
+            success: false,
+            message: "Event ID and user email are required.",
+          });
         }
 
         // প্রথমে ইভেন্টটি খুঁজে বের করুন
@@ -365,21 +400,19 @@ app.patch("/join-event", verifyToken, async (req, res) => {
             .json({ success: false, message: "Event not found." });
         }
 
-
-        if(event.createdBy.userMail === userEmail){
-          return res
-            .status(403)
-            .json({
-              success: false,
-              message: "You cannot join your own event.",
-            });
-        }else if ((event.attendeeUsers && event.attendeeUsers.includes(userEmail))) {
-          return res
-            .status(409)
-            .json({
-              success: false,
-              message: "You have already joined this event.",
-            });
+        if (event.createdBy.userMail === userEmail) {
+          return res.status(403).json({
+            success: false,
+            message: "You cannot join your own event.",
+          });
+        } else if (
+          event.attendeeUsers &&
+          event.attendeeUsers.includes(userEmail)
+        ) {
+          return res.status(409).json({
+            success: false,
+            message: "You have already joined this event.",
+          });
         }
 
         // ডাটাবেজে ইভেন্টটি আপডেট করুন
