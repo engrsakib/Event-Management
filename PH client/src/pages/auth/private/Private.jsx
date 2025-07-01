@@ -13,11 +13,11 @@ const Privete = ({ children }) => {
     setUser(data?.user);
   }, [data]);
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return <Loading/>;
   }
 
-  
+    
 
   // console.log(user)
   if (user && user?.email && user?.email !== "" && user?.email !== null && user?.email !== undefined && user?.name && user?.name !== "" && user?.name !== null && user?.name !== undefined && user?.photo && user?.photo !== "" && user?.photo !== null && user?.photo !== undefined) {
