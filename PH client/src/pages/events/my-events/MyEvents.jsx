@@ -1,5 +1,3 @@
-
-
 /* eslint-disable no-unused-vars */
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
@@ -191,12 +189,12 @@ export default function EnhancedMyEvents() {
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   className="absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
                   onClick={onClose}
                 >
                   <FaTimes className="text-xl" />
-                </button>
+                </button> */}
               </div>
 
               {/* Content */}
@@ -236,38 +234,38 @@ export default function EnhancedMyEvents() {
                       </div>
                       <div>
                         <p className="text-gray-500 text-sm font-medium">Location</p>
-                        <p className="text-gray-900 font-bold text-sm">{event.location?.division || "Not specified"}</p>
+                        <p className="text-gray-900 font-bold text-sm">{event.address.location?.union || "Not specified"}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Location Details */}
-                {event.location && (
+                {event.address.location && (
                   <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 mb-6">
                     <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
                       <FaMapMarkerAlt className="text-red-600" />
                       Event Location
                     </h3>
                     <div className="flex flex-wrap gap-2 text-gray-700">
-                      {event.location.division && (
+                      {event.address.location.division && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.division}
+                          {event.address.location.division}
                         </span>
                       )}
-                      {event.location.district && (
+                      {event.address.location.district && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.district}
+                          {event.address.location.district}
                         </span>
                       )}
-                      {event.location.upazila && (
+                      {event.address.location.upazila && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.upazila}
+                          {event.address.location.upazila}
                         </span>
                       )}
-                      {event.location.union && (
+                      {event.address.location.union && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.union}
+                          {event.address.location.union}
                         </span>
                       )}
                     </div>
@@ -317,7 +315,7 @@ export default function EnhancedMyEvents() {
       <DetailsModal event={selectedEvent} onClose={handleCloseModal} />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-red-600 via-red-700 to-red-800 py-16">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#7F0B0B] to-[#590000] py-16">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent_50%)]"></div>
 
@@ -400,7 +398,7 @@ export default function EnhancedMyEvents() {
                 onClick={(e) => handleCardClick(e, event)}
               >
                 {/* Card Header */}
-                <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 relative overflow-hidden">
+                <div className="bg-gradient-to-br from-[#7F0B0B] to-[#590000] p-6 relative overflow-hidden">
                   <div className="absolute inset-0 bg-black/10"></div>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
 
