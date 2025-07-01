@@ -4,40 +4,40 @@ import { useEffect, useState } from "react"
 
 const carouselData = [
   {
-    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    img: "https://plus.unsplash.com/premium_photo-1661962476059-13543ea45d4d?q=80&w=1180&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     text: "Flood Relief Event",
-    subtitle: "সাহায্যের হাত বাড়িয়ে দিন",
-    description: "বন্যা দুর্গতদের পাশে দাঁড়ান",
+    subtitle: "Extend a helping hand",
+    description: "Stand with the flood victims and extend a helping hand.",
   },
   {
-    img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80",
+    img: "https://plus.unsplash.com/premium_photo-1664299422915-d67e36404534?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     text: "Blood Donation Drive",
-    subtitle: "জীবন বাঁচান, রক্ত দান করুন",
-    description: "একটি রক্তদান একটি জীবন",
+    subtitle: "Save lives, donate blood",
+    description: "A blood donation is a life saved.",
   },
   {
-    img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80",
+    img: "https://images.unsplash.com/photo-1634019062601-49e0b65c669e?q=80&w=1229&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     text: "Winter Clothes Distribution",
-    subtitle: "শীতের উষ্ণতা ভাগ করুন",
-    description: "গরিব মানুষদের শীতবস্ত্র দিন",
+    subtitle: "Share the warmth of winter",
+    description: "Distribute winter clothes to the needy.",
   },
   {
-    img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
+    img: "https://images.unsplash.com/photo-1583794018021-c841442da0e3?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     text: "Tree Plantation Campaign",
-    subtitle: "সবুজ পৃথিবী গড়ুন",
-    description: "পরিব���শ রক্ষায় এগিয়ে আসুন",
+    subtitle: "Plant a tree, grow a future",
+    description: "Stand up for environmental protection",
   },
   {
-    img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80",
+    img: "https://images.unsplash.com/photo-1594312915251-48db9280c8f1?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     text: "Education for All",
-    subtitle: "শিক্ষার আলো ছড়িয়ে দিন",
-    description: "সবার জন্য শিক্ষার সুযোগ",
+    subtitle: "Spread the light of education",
+    description: "Opportunities for education for all",
   },
   {
-    img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80",
+    img: "https://images.unsplash.com/photo-1744012254416-f72fb5f8290c?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     text: "Food for Needy",
-    subtitle: "ক্ষুধার্তদের খাবার দিন",
-    description: "কেউ যেন ক্ষুধার্ত না থাকে",
+    subtitle: "Give food to the hungry",
+    description: "No one should go hungry",
   },
 ]
 
@@ -92,7 +92,7 @@ export default function EnhancedCarousel() {
   return (
     <>
       <section
-        className="w-full h-[85vh] relative overflow-hidden shadow-2xl group"
+        className="w-full h-[90vh] relative overflow-hidden shadow-2xl group"
         onMouseEnter={() => setIsPlaying(false)}
         onMouseLeave={() => setIsPlaying(true)}
       >
