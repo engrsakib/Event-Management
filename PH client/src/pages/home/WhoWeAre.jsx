@@ -199,7 +199,7 @@ export default function EnhancedWhoWeAre() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
-            <p className="text-gray-600 text-lg mb-6">আমাদের সাথে যোগ দিন এবং একসাথে একটি উন্নত সমাজ গড়ে তুলুন</p>
+            <p className="text-gray-600 text-lg mb-6">Join us and together let's build a better society.</p>
             <button className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:from-red-700 hover:to-red-800">
               Join Our Mission
             </button>
