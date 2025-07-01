@@ -1,7 +1,7 @@
 export default function Contact() {
   return (
     <>
-      <section className="w-11/12 lg:w-[90%] mx-auto mt-24 px-4 mb-20">
+      <section className="w-11/12 lg:w-[80%] mx-auto mt-24 px-4 mb-20">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-16 text-center text-[#7F0B0B] animate-fadeInDown tracking-tight">
           Contact Us
         </h2>
