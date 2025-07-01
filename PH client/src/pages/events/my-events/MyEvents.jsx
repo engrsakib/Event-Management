@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom"
 import axiosSecure from "../../../utils/axiosSecure"
 import nodata from "/nodata.svg"
 import useProfile from "../../../hooks/getUserProfile"
+import { Helmet } from "react-helmet"
 
 function LoadingSpinner() {
   return (
@@ -311,6 +312,7 @@ export default function EnhancedMyEvents() {
   }
 
   return (
+   <>
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-12">
       <DetailsModal event={selectedEvent} onClose={handleCloseModal} />
 
@@ -511,5 +513,11 @@ export default function EnhancedMyEvents() {
         )}
       </div>
     </div>
+
+    <Helmet>
+        <title>Eventify || My Events</title>
+      </Helmet>
+   
+   </>
   )
 }

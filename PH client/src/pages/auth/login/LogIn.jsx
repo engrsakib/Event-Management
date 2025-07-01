@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { use, useState } from "react";
 import logo from "/logo.svg";
 import { PiEyeClosedBold, PiEyeClosedDuotone } from "react-icons/pi";
 import axios from "axios";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { QueryClient } from "@tanstack/react-query";
 
 const BASE_URL = import.meta.env.VITE_ADMIN_URL;
@@ -18,6 +18,10 @@ export default function LogIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  // console.log(location?.state?.from?.pathname);
 
   const data = {
     greetings: "Welcome back!",
@@ -57,7 +61,7 @@ export default function LogIn() {
       if (token) {
         localStorage.setItem("token", token);
         // QueryClient.invalidateQueries({ queryKey: ['profile'] });
-        window.location = "/"; // Redirect to home page
+        window.location = location?.state?.from?.pathname ||   "/"; // Redirect to home page
         // navigate("/"); // Alternatively, you can use navigate if you want to use react-router
       } else {
         setError("No token received from server.");

@@ -1,31 +1,42 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import useProfile from "../../../hooks/getUserProfile";
 import Loading from "../../loadding/Loading";
 
-const Privete = ({ children }) => {
-  const { data, isLoading, isError, error } = useProfile();
+const Private = ({ children }) => {
+  const { data, isLoading } = useProfile();
   const location = useLocation();
-  const [user, setUser] = useState(null);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  const user = data?.user;
+  const isUserValid = user && user.email && user.name && user.photo;
 
   useEffect(() => {
-    setUser(data?.user);
-  }, [data]);
+    let timer;
+    if (!isLoading && !isUserValid) {
+      timer = setTimeout(() => {
+        setShouldRedirect(true);
+      }, 2000);
+    }
 
-  if (isLoading || !user) {
-    return <Loading/>;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isLoading, isUserValid]);
+
+  if (isLoading) {
+    return <Loading />;
   }
 
-    
-
-  // console.log(user)
-  if (user && user?.email && user?.email !== "" && user?.email !== null && user?.email !== undefined && user?.name && user?.name !== "" && user?.name !== null && user?.name !== undefined && user?.photo && user?.photo !== "" && user?.photo !== null && user?.photo !== undefined) {
-    // console.log("privete")
+  if (isUserValid) {
     return children;
   }
 
-    return <Navigate state={location.pathname} to={`/auth/user/login`}></Navigate>;
+  if (shouldRedirect) {
+    return <Navigate to="/auth/user/login" state={{ from: location }} replace />;
+  }
+
+  return <Loading />;
 };
 
-export default Privete;
+export default Private;

@@ -9,6 +9,7 @@ import Swal from "sweetalert2"
 import axiosSecure from "../../../utils/axiosSecure"
 import nodata from "/nodata.svg"
 import useProfile from "../../../hooks/getUserProfile"
+import { Helmet } from "react-helmet"
 
 const FILTERS = [
   { value: "", label: "All Time", icon: "🌟" },
@@ -320,6 +321,7 @@ export default function EnhancedAllEvents() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 pb-12">
       <DetailsModal event={selectedEvent} onClose={handleCloseModal} />
 
@@ -519,5 +521,11 @@ export default function EnhancedAllEvents() {
         )}
       </div>
     </div>
+
+    <Helmet>
+        <title>Eventify || All Event</title>
+      </Helmet>
+    
+    </>
   )
 }

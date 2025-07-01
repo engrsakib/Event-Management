@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import LocationPicker from "../LocationPicker/LocationPicker"
 import useProfile from "../../../hooks/getUserProfile"
 import axiosSecure from "../../../utils/axiosSecure"
+import { Helmet } from "react-helmet"
 
 // SVG Icons
 const UserIcon = () => (
@@ -301,6 +302,7 @@ export default function EnhancedAddEvents() {
   }
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 py-12">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-red-600 via-red-700 to-red-800 py-16 mb-12">
@@ -643,5 +645,9 @@ export default function EnhancedAddEvents() {
         </motion.div>
       </div>
     </div>
+    <Helmet>
+        <title>Eventify || New Event</title>
+      </Helmet>
+    </>
   )
 }
