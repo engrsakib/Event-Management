@@ -249,42 +249,38 @@ export default function EnhancedAllEvents() {
                       </div>
                       <div>
                         <p className="text-gray-500 text-sm font-medium">Location</p>
-                        <div className="flex justify-between items-center">
-                          <p className="text-gray-900 font-bold text-sm">{event.address?.location?.district || "Not specified"}</p>
-                          <FaMapMarkerAlt className="text-red-600 ml-2" />
-                        <p className="text-gray-900 font-bold text-sm">{event.address?.location?.upazila || "Not specified"}</p>
-                        </div>
+                          <p className="text-gray-900 font-bold text-sm">{event.address?.location?.union || "Not specified"}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Location Details */}
-                {event.location && (
+                {event.address.location && (
                   <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-6 mb-6">
                     <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
                       <FaMapMarkerAlt className="text-red-600" />
                       Event Location
                     </h3>
                     <div className="flex flex-wrap gap-2 text-gray-700">
-                      {event.location.division && (
+                      {event.address.location.division && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.division}
+                          {event.address.location.division}
                         </span>
                       )}
-                      {event.location.district && (
+                      {event.address.location.district && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.district}
+                          {event.address.location.district}
                         </span>
                       )}
-                      {event.location.upazila && (
+                      {event.address.location.upazila && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.upazila}
+                          {event.address.location.upazila}
                         </span>
                       )}
-                      {event.location.union && (
+                      {event.address.location.union && (
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-medium border">
-                          {event.location.union}
+                          {event.address.location.union}
                         </span>
                       )}
                     </div>
