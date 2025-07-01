@@ -204,12 +204,12 @@ export default function EnhancedAllEvents() {
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   className="absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
                   onClick={onClose}
                 >
                   <FaTimes className="text-xl" />
-                </button>
+                </button> */}
               </div>
 
               {/* Content */}
@@ -249,7 +249,11 @@ export default function EnhancedAllEvents() {
                       </div>
                       <div>
                         <p className="text-gray-500 text-sm font-medium">Location</p>
-                        <p className="text-gray-900 font-bold text-sm">{event.location?.division || "Not specified"}</p>
+                        <div className="flex justify-between items-center">
+                          <p className="text-gray-900 font-bold text-sm">{event.address?.location?.district || "Not specified"}</p>
+                          <FaMapMarkerAlt className="text-red-600 ml-2" />
+                        <p className="text-gray-900 font-bold text-sm">{event.address?.location?.upazila || "Not specified"}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -324,7 +328,7 @@ export default function EnhancedAllEvents() {
       <DetailsModal event={selectedEvent} onClose={handleCloseModal} />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-red-600 via-red-700 to-red-800 py-16">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#7F0B0B] to-[#590000] py-16">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent_50%)]"></div>
 
@@ -375,7 +379,7 @@ export default function EnhancedAllEvents() {
                 )}
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl px-6 py-3 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-br from-[#7F0B0B] to-[#590000] hover:from-red-700 hover:to-red-800 text-white rounded-xl px-6 py-3 flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                 >
                   <FaSearch />
                   <span className="hidden sm:inline font-bold">Search</span>
@@ -432,7 +436,7 @@ export default function EnhancedAllEvents() {
                 onClick={(e) => handleCardClick(e, event)}
               >
                 {/* Card Header */}
-                <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 relative overflow-hidden">
+                <div className="bg-gradient-to-br from-[#7F0B0B] to-[#590000] p-6 relative overflow-hidden">
                   <div className="absolute inset-0 bg-black/10"></div>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
 
@@ -496,7 +500,7 @@ export default function EnhancedAllEvents() {
 
                   {/* Join Button */}
                   <button
-                    className="join-event-btn w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group-hover:scale-105"
+                    className="join-event-btn w-full bg-gradient-to-br from-[#7F0B0B] to-[#590000] hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group-hover:scale-105"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleJoinEvent(event._id)
