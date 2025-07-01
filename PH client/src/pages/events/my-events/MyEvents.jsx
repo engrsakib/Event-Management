@@ -371,7 +371,7 @@ export default function EnhancedMyEvents() {
       </div>
 
       {/* Events Grid */}
-      <div className="max-w-7xl mx-auto px-4 mt-12">
+      <div className="w-11/12 lg:w-[80%] mx-auto px-4 mt-12">
         {isLoading ? (
           <LoadingSpinner />
         ) : isError ? (
