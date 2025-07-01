@@ -3,10 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import logo from "/logo.png";
 import useProfile from "../../hooks/getUserProfile";
 import axios from "axios";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import Loading from "../../pages/loadding/Loading";
-
-
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,10 +22,7 @@ const Navbar = () => {
   useEffect(() => {
     setUser(data?.user);
     setIsLoggingIn(user?.email ? true : false);
-    
   }, [data, user]);
-   
-  
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -48,8 +43,6 @@ const Navbar = () => {
   if (isLoading) {
     return <Loading />;
   }
-
-  
 
   const handleLogout = async () => {
     try {
@@ -133,36 +126,60 @@ const Navbar = () => {
             }`}
           >
             <li>
-              <Link
+              <NavLink
                 to="/"
-                className="hover:text-yellow-300 transition-colors duration-200"
+                className={({ isActive }) =>
+                  `transition-colors duration-200 ${
+                    isActive
+                      ? "text-yellow-300"
+                      : "text-white hover:text-yellow-300"
+                  }`
+                }
               >
                 Home
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/events"
-                className="hover:text-yellow-300 transition-colors duration-200"
+                className={({ isActive }) =>
+                  `transition-colors duration-200 ${
+                    isActive
+                      ? "text-yellow-300"
+                      : "text-white hover:text-yellow-300"
+                  }`
+                }
               >
                 Events
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/add-event"
-                className="hover:text-yellow-300 transition-colors duration-200"
+                className={({ isActive }) =>
+                  `transition-colors duration-200 ${
+                    isActive
+                      ? "text-yellow-300"
+                      : "text-white hover:text-yellow-300"
+                  }`
+                }
               >
                 Add Event
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to="/my-events"
-                className="hover:text-yellow-300 transition-colors duration-200"
+                className={({ isActive }) =>
+                  `transition-colors duration-200 ${
+                    isActive
+                      ? "text-yellow-300"
+                      : "text-white hover:text-yellow-300"
+                  }`
+                }
               >
                 My Event
-              </Link>
+              </NavLink>
             </li>
             <li className="relative" ref={dropdownRef}>
               {user ? (
