@@ -1,169 +1,163 @@
-# BloodBridge
+# Eventify - A Feature-Rich Event Management MERN Application
 
-A comprehensive platform designed for community welfare and fundraising, enabling users to create, manage, and participate in donation campaigns. This project also facilitates lost and found item management, allowing users to post, browse, and recover lost belongings effectively.
+[](https://opensource.org/licenses/MIT)
+[](https://reactjs.org/)
+[](https://nodejs.org/)
+[](https://expressjs.com/)
+[](https://www.mongodb.com/)
 
-## Features for Your Project  
+**Eventify** is a full-featured web application built on the MERN stack (MongoDB, Express.js, React.js, Node.js) designed for efficient event management. It provides a seamless and intuitive user experience with a custom-built authentication system, dynamic event operations, and a robust search and filtering engine.
 
-### 🌟 Core Functionalities:
-- **User Role Management**:
-  - **Admin 🌐**: Full control of the platform, including user management, donation requests, funding, and content publishing.
-  - **Donor 🩸**: Ability to register, view donation requests, respond to requests, and manage their own profiles.
-  - **Volunteer 🤝**: Permission to create and manage donation requests. Volunteers can update the status of blood donation requests.
-  - 💡 *Admins can assign roles (e.g., Volunteer, Admin) or block users directly from the database.*
+-----
 
-### 🔒 User Authentication:
-- **Registration**:
-  - Users can register with their email, name, avatar (via imageBB), blood group, district, upazila, and password. By default, every registered user becomes a "Donor."
-  - **Default User Status**: Active.
-  - Admins can block/unblock users, which updates their status accordingly.
-- **Login**: Secure login with email and password. Social login is not required.
-  
-### 🔑 Private Dashboard:
-- **Profile Management**:
-  - Users can view and edit their profile data, except for their email, which remains static.
-  - Admins can manage all users, while donors and volunteers manage only their own data.
+## ✨ Key Features
 
-#### Donor-Specific Features:
-- **Recent Donation Requests**: Donors can view their top three recent requests on the dashboard homepage.
-- **Full Donation History**: Paginated view of all donation requests with filtering options (`pending`, `in-progress`, `done`, `canceled`).
-- **Create Requests**: Donors can submit detailed blood donation requests, including recipient details, location, and donation dates.  
-  *Note: Only active donors can create requests.*
+  - **Custom User Authentication:** Secure user registration and login system built from scratch using JWT (JSON Web Tokens) and cookie-based sessions.
+  - **Dynamic Event Management (CRUD):** Authenticated users can create, read, update, and delete events with ease.
+  - **Advanced Search and Filtering:** A powerful system allowing users to search events by title and filter them based on predefined date ranges (Today, This Week, Last Week, This Month, Last Month).
+  - **Event Participation System:** Users can join events, which atomically increments the attendee count. A user is restricted to joining any single event only once.
+  - **Personalized User Dashboard:** A dedicated "My Events" page where users can view and manage only the events they have created.
+  - **Secure Private Routes:** Core application pages such as Events, Add Event, and My Events are protected and accessible only to authenticated users.
+  - **Intuitive User Interface:** A clean, responsive, and performance-optimized interface designed for an excellent user experience.
+  - **MVC Architecture:** The backend is structured using the Model-View-Controller (MVC) pattern for maintainability and scalability.
 
-#### Admin-Specific Features:
-- **Dashboard Statistics**:
-  - View total users, total funding, and total donation requests in real-time.
-- **User Management**:
-  - Block/unblock users, assign roles, and manage user statuses through a detailed table with pagination and filters.
-- **Global Request Management**:
-  - Manage all blood donation requests, edit statuses, and delete requests.
-- **Content Management**:
-  - Publish/unpublish blogs, edit and delete content, or add new blogs through a rich text editor.
+-----
 
-#### Volunteer-Specific Features:
-- **Request Management**:
-  - Volunteers can only update the statuses of donation requests (e.g., from "pending" to "in-progress").
-- **Content Contribution**:
-  - Volunteers can add blogs but cannot publish or delete content.
+## 🛠️ Technologies Used
 
-### 🌐 Public Pages:
-- **Home Page**:
-  - Includes registration, donor search, contact information, and a responsive footer.
-- **Search Donors**:
-  - Users can filter donors by blood group, district, and upazila.
-- **Donation Requests**:
-  - Public view of all pending donation requests, with options to view more details after logging in.
-- **Blogs**:
-  - Published blogs are accessible publicly, with detailed views for each blog.
+  - **Frontend:**
 
-### 💳 Payment Integration:
-- **Funding Page**:
-  - Users can make financial contributions via Stripe integration.
-  - Displays total funds and detailed records of donations (e.g., donor name, amount, and date).
+      - React.js
+      - React Router
+      - Axios
+      - Tailwind CSS (or your preferred CSS framework)
+      - Date-fns
 
-### 📅 Additional Features:
-- **Pagination**:
-  - Implemented across all tables and lists (e.g., user management, donation requests, and funding records).
-- **Sorting & Filtering**:
-  - Sorting by date, status, or categories to ensure streamlined navigation.
-- **JWT Protection**:
-  - Secure private APIs and routes using JSON Web Tokens (JWT), stored in the browser’s local storage.
+  - **Backend:**
 
-### 🎨 User Experience:
-- Fully responsive design for mobile, tablet, and desktop devices.  
-- Rich text editing for blog content using **Jodit-react**.  
+      - Node.js
+      - Express.js
+      - MongoDB
+      - JSON Web Token (JWT)
+      - Cookie-Parser
+      - CORS
+      - Dotenv
+      - Moment Timezone
 
-### 🚀 Challenges Addressed:
-- Integration of funding features, JWT authentication, paginated tables, and volunteer/admin-specific permissions ensures scalability and ease of management.
+-----
 
+## 🚀 Getting Started
 
+To get a local copy up and running, follow these simple steps.
 
+### Prerequisites
 
+Ensure you have the following installed on your local machine:
 
+  - Node.js (v18 or later)
+  - npm or yarn
+  - MongoDB (local installation or a cloud instance like MongoDB Atlas)
 
-### API Endpoints
+### Installation
 
-#### User Management
-1. **Add User**
-   - **Method:** `POST /users`
-   - **Functionality:** Adds a new user to the database.
-   - **Input:** User data (name, email, photo, etc.).
+1.  **Clone the repository:**
 
-2. **Fetch User by Email**
-   - **Method:** `GET /users/:mail`
-   - **Functionality:** Fetches user details by email.
+    ```sh
+    git clone https://github.com/engrsakib/Event-Management.git
+    cd Event-Management
+    ```
 
-#### Lost & Found Campaigns
-1. **Create Lost/Found Item Post**
-   - **Method:** `POST /items`
-   - **Functionality:** Adds a new lost or found item post to the database.
+2.  **Configure the Backend (Server):**
 
-2. **Fetch All Posts**
-   - **Method:** `GET /items`
-   - **Functionality:** Retrieves all lost and found item posts.
+      - Navigate to the server directory:
+        ```sh
+        cd "ph server"
+        ```
+      - Install the required dependencies:
+        ```sh
+        npm install
+        ```
+      - Create a `.env` file in the root of the `/ph server` directory and add the necessary environment variables (see the Environment Variables section below).
+      - Start the backend server:
+        ```sh
+        npm run dev
+        ```
 
-3. **Fetch Post Details**
-   - **Method:** `GET /items/:id`
-   - **Functionality:** Fetches detailed information about a specific lost or found item post using its ID.
+3.  **Configure the Frontend (Client):**
 
-4. **Update Post**
-   - **Method:** `PUT /items/:id`
-   - **Functionality:** Updates an existing lost or found item post by its ID.
+      - Navigate to the client directory from the root project folder:
+        ```sh
+        cd client 
+        ```
+      - Install the required dependencies:
+        ```sh
+        npm install
+        ```
+      - Create a `.env` file in the root of the `/client` directory and add the necessary environment variables.
+      - Start the frontend development server:
+        ```sh
+        npm run dev
+        ```
 
-5. **Delete Post**
-   - **Method:** `DELETE /items/:id`
-   - **Functionality:** Deletes a specific lost or found item post by ID.
+-----
 
-#### Recovered Items Management
-1. **Mark as Recovered**
-   - **Method:** `POST /recovered`
-   - **Functionality:** Marks a lost or found item as recovered and stores recovery details (location, date, recovered by).
+## ⚙️ Environment Variables
 
-2. **Fetch All Recovered Items**
-   - **Method:** `GET /recovered`
-   - **Functionality:** Retrieves all recovered items with relevant details.
+To run this project, you will need to add the following environment variables to your `.env` files.
 
-### Deployment Guidelines
-- Ensure Firebase and MongoDB configurations are secured using environment variables.
-- Fully responsive design optimized for mobile, tablet, and desktop.
-- Avoid CORS/404/504 errors on production.
+#### Backend (`/ph server/.env`)
 
-## Live Site
-[Visit BloodBridge](https://engrsakib-blood-donations-project.netlify.app/)
+```
+MONGO_URI=your_mongodb_connection_string
+PORT=5000
+JWT_SECRET=your_strong_jwt_secret_key
+```
 
-## GitHub Repositories
-- **Server Repository:** [server-side-engrsakib](https://github.com/engrsakib/blood-donor-simple-project-server)
-- **Client Repository:** [client-side-engrsakib](https://github.com/engrsakib/blood-donor-simple-project-client-side)
+#### Frontend (`/client/.env`)
 
-## How to Run the Server
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/engrsakib/blood-donor-simple-project-server
-   
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the server:
-   ```bash
-   nodemon index.js
-   ```
+```
+VITE_API_BASE_URL=http://localhost:5000
+```
 
-## How to Run the Client
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/engrsakib/sakib-welfare-champine-client-side.git
-   cd sakib-welfare-champine-client-side
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the client:
-   ```bash
-   npm start
-   ```
+*(Note: Replace `VITE_` with `REACT_APP_` if you are using Create React App.)*
 
-## Contribution
-Contributions are welcome! Feel free to submit issues or pull requests to improve the platform.
+-----
 
+## 🔌 API Endpoints
+
+The following are the main API routes supported by the backend:
+
+### Authentication Routes
+
+| Method | Endpoint             | Description                  |
+|--------|----------------------|------------------------------|
+| `POST` | `/api/auth/register` | Register a new user.         |
+| `POST` | `/api/auth/login`    | Log in an existing user.     |
+| `POST` | `/api/auth/logout`   | Log out the current user.    |
+
+### Event Routes
+
+| Method  | Endpoint                | Description                                        |
+|---------|-------------------------|----------------------------------------------------|
+| `GET`   | `/api/events`           | Get all events with search and filter query params. |
+| `POST`  | `/api/events`           | Create a new event (Private).                      |
+| `GET`   | `/api/events/my-events` | Get all events created by the logged-in user (Private). |
+| `GET`   | `/api/events/:id`       | Get details of a single event.                     |
+| `PUT`   | `/api/events/:id`       | Update an existing event (Private, user-owned).    |
+| `DELETE`| `/api/events/:id`       | Delete an existing event (Private, user-owned).    |
+| `PATCH` | `/api/events/join/:id`  | Join an event and increment the attendee count (Private). |
+
+-----
+
+## 👤 Author
+
+**Sakib**
+
+  - **GitHub:** [@engrsakib](https://github.com/engrsakib)
+  - **LinkedIn:** [Your LinkedIn Profile](https://www.linkedin.com/in/engrsakib)
+
+-----
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.

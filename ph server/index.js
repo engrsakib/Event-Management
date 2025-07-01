@@ -249,7 +249,7 @@ async function run() {
     app.post("/event-details", verifyToken, async (req, res) => {
       try {
         const { id } = req.body;
-        console.log(req.query);
+        // console.log(req.query);
 
         if (!id) {
           return res.status(400).json({
