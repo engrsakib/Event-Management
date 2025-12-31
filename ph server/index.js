@@ -25,6 +25,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://ph-event-management-client.vercel.app",
+      "https://courageous-truffle-ae4f08.netlify.app",
+      "http://test-todo-tas.surge.sh"
     ],
     credentials: true,
   })
